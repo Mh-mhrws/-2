@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>منصة الخدمات المتكاملة</title>
-    <!-- Font Awesome للأيقونات -->
+    <title>منصة خدماتي • مصر - نظام متكامل</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js">
+    </script>
+
     <style>
-        /* -------------------- الباكجراوند والتصميم العام -------------------- */
+        /* ============================================================
+           جميع الأنماط (نفس الكود السابق مع إضافات)
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -21,116 +31,311 @@
             padding: 20px;
         }
 
-        /* -------------------- الشريط العلوي (Navbar) -------------------- */
+        /* شاشة تسجيل الدخول */
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .login-screen.hidden {
+            display: none;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px 35px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-box .logo-icon {
+            font-size: 48px;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .login-box h2 {
+            font-size: 24px;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .login-box p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            transition: 0.3s;
+            background: #f8fafc;
+            direction: ltr;
+            text-align: center;
+        }
+
+        .login-box input:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .login-box .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-box .login-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .login-box .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .login-box .error-msg {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .login-box .error-msg.show {
+            display: block;
+        }
+
+        .login-box .success-msg {
+            color: #16a34a;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .login-box .success-msg.show {
+            display: block;
+        }
+
+        .login-box .code-input-area {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .login-box .code-input-area.active {
+            display: block;
+        }
+
+        .login-box .phone-input-area {
+            display: block;
+        }
+
+        .login-box .phone-input-area.hidden {
+            display: none;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        /* الشريط العلوي */
         .navbar {
             background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
             border-radius: 20px;
-            padding: 15px 30px;
-            margin-bottom: 35px;
+            padding: 12px 24px;
+            margin-bottom: 25px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 12px;
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        .logo {
-            font-size: 26px;
-            font-weight: 800;
-            color: #0f172a;
-            letter-spacing: -0.5px;
-        }
-        .logo span {
-            color: #2563eb;
-        }
-        .logo small {
-            font-size: 12px;
-            font-weight: 400;
-            color: #64748b;
-            margin-right: 8px;
+        .navbar .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
 
-        .nav-icons {
+        .navbar .logo-area .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .navbar .logo-area .logo-text span {
+            color: #2563eb;
+        }
+
+        .animated-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
             display: flex;
-            gap: 14px;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            animation: logoFloat 3s ease-in-out infinite;
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        @keyframes logoFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                border-radius: 16px;
+            }
+            25% {
+                transform: translateY(-8px) rotate(3deg);
+                border-radius: 20px 10px 20px 10px;
+            }
+            50% {
+                transform: translateY(0) rotate(0deg);
+                border-radius: 16px;
+            }
+            75% {
+                transform: translateY(8px) rotate(-3deg);
+                border-radius: 10px 20px 10px 20px;
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+                border-radius: 16px;
+            }
+        }
+
+        .navbar .nav-icons {
+            display: flex;
+            gap: 8px;
             align-items: center;
             flex-wrap: wrap;
         }
 
-        .nav-icons a {
+        .navbar .nav-icons a,
+        .navbar .nav-icons button {
             text-decoration: none;
-            color: #1e293b;
-            font-size: 15px;
+            padding: 8px 14px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
             transition: 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 18px;
-            border-radius: 40px;
-            background: rgba(255, 255, 255, 0.4);
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            color: #1e293b;
             border: 1px solid rgba(0, 0, 0, 0.04);
-            font-weight: 500;
         }
 
-        .nav-icons a:hover {
+        .navbar .nav-icons a:hover,
+        .navbar .nav-icons button:hover {
+            background: #2563eb;
+            color: #fff;
             transform: translateY(-2px);
         }
 
-        .nav-icons a.whatsapp {
+        .navbar .nav-icons .whatsapp {
             background: #25D366;
             color: #fff;
             border: none;
-            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
-        }
-        .nav-icons a.whatsapp:hover {
-            background: #1da851;
-            box-shadow: 0 6px 24px rgba(37, 211, 102, 0.4);
         }
 
-        .nav-icons a.login {
-            background: #1e293b;
+        .navbar .nav-icons .whatsapp:hover {
+            background: #1da851;
+        }
+
+        .navbar .nav-icons .logout {
+            background: #dc2626;
             color: #fff;
             border: none;
-            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
-        }
-        .nav-icons a.login:hover {
-            background: #0f172a;
         }
 
-        /* -------------------- بطاقات الخدمات -------------------- */
+        .navbar .nav-icons .logout:hover {
+            background: #b91c1c;
+        }
+
+        .navbar .nav-icons .pricing-btn {
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+        }
+
+        .navbar .nav-icons .pricing-btn:hover {
+            background: #6d28d9;
+        }
+
+        /* الأقسام */
         .section-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: #0f172a;
-            margin: 45px 0 20px;
-            padding-right: 18px;
+            margin: 30px 0 16px;
+            padding-right: 16px;
             border-right: 5px solid #2563eb;
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-        .section-title i {
-            color: #2563eb;
-            font-size: 22px;
+            gap: 10px;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+            margin-bottom: 18px;
         }
 
         .service-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 24px;
-            padding: 22px 20px 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.7);
             transition: all 0.35s ease;
             display: flex;
@@ -140,45 +345,21 @@
             overflow: hidden;
         }
 
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
-            background-size: 200% 100%;
-            opacity: 0;
-            transition: 0.5s;
-        }
-
-        .service-card:hover::before {
-            opacity: 1;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
         .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
             background: rgba(255, 255, 255, 0.96);
-            border-color: #2563eb30;
         }
 
         .service-card .card-image {
             width: 100%;
-            height: 140px;
-            border-radius: 16px;
-            margin-bottom: 14px;
+            height: 100px;
+            border-radius: 14px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 56px;
+            font-size: 40px;
             color: #fff;
             position: relative;
             overflow: hidden;
@@ -186,42 +367,73 @@
 
         .service-card .card-image .overlay-text {
             position: absolute;
-            bottom: 10px;
-            right: 14px;
-            font-size: 11px;
-            background: rgba(0,0,0,0.3);
+            bottom: 6px;
+            right: 10px;
+            font-size: 10px;
+            background: rgba(0, 0, 0, 0.3);
             padding: 2px 12px;
             border-radius: 30px;
             color: #fff;
-            backdrop-filter: blur(4px);
         }
 
-        /* ألوان متنوعة للصور */
-        .img-blue { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
-        .img-green { background: linear-gradient(135deg, #16a34a, #15803d); }
-        .img-purple { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
-        .img-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .img-red { background: linear-gradient(135deg, #dc2626, #b91c1c); }
-        .img-teal { background: linear-gradient(135deg, #0d9488, #0f766e); }
-        .img-pink { background: linear-gradient(135deg, #db2777, #be185d); }
-        .img-indigo { background: linear-gradient(135deg, #4f46e5, #4338ca); }
-        .img-cyan { background: linear-gradient(135deg, #0891b2, #0e7490); }
-        .img-rose { background: linear-gradient(135deg, #e11d48, #be123c); }
-        .img-amber { background: linear-gradient(135deg, #f59e0b, #b45309); }
-        .img-lime { background: linear-gradient(135deg, #65a30d, #4d7c0f); }
+        .service-card .price-tag {
+            background: #2563eb;
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 4px 0 8px;
+        }
+
+        .img-blue {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+        .img-green {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+        }
+        .img-purple {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        }
+        .img-orange {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        .img-red {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        }
+        .img-teal {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+        }
+        .img-pink {
+            background: linear-gradient(135deg, #db2777, #be185d);
+        }
+        .img-indigo {
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+        }
+        .img-cyan {
+            background: linear-gradient(135deg, #0891b2, #0e7490);
+        }
+        .img-rose {
+            background: linear-gradient(135deg, #e11d48, #be123c);
+        }
+        .img-amber {
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+        }
+        .img-lime {
+            background: linear-gradient(135deg, #65a30d, #4d7c0f);
+        }
 
         .service-card h3 {
-            font-size: 17px;
+            font-size: 15px;
             color: #0f172a;
-            margin-bottom: 4px;
             font-weight: 700;
         }
 
         .service-card p {
-            font-size: 13px;
+            font-size: 12px;
             color: #64748b;
-            margin-bottom: 14px;
-            line-height: 1.6;
+            margin-bottom: 10px;
+            line-height: 1.4;
             flex: 1;
         }
 
@@ -229,9 +441,9 @@
             background: #2563eb;
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 14px;
             border-radius: 40px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
@@ -244,7 +456,6 @@
         .service-card .btn-service:hover {
             background: #1d4ed8;
             transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
         }
 
         .service-card .btn-whatsapp {
@@ -252,503 +463,1656 @@
         }
         .service-card .btn-whatsapp:hover {
             background: #1da851;
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
         }
 
-        /* -------------------- تفريعات الجامعات -------------------- */
-        .university-sub {
-            display: none;
-            margin-top: 14px;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 14px;
-            width: 100%;
-            max-height: 350px;
-            overflow-y: auto;
+        /* سجل الخدمات */
+        .log-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 18px 22px;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        .university-sub.active {
-            display: block;
+        .log-section .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
-        .university-sub a {
-            display: block;
-            padding: 8px 14px;
-            margin: 4px 0;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 10px;
-            color: #1e293b;
-            text-decoration: none;
-            font-size: 14px;
-            transition: 0.2s;
-            border-right: 3px solid transparent;
+        .log-section .log-header h3 {
+            font-size: 18px;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .university-sub a:hover {
-            background: #fff;
-            border-right-color: #2563eb;
-            padding-right: 22px;
+        .log-section .log-header .log-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
         }
 
-        .university-sub strong {
-            display: block;
-            margin: 12px 0 6px;
-            color: #1e293b;
-            font-size: 14px;
-        }
-
-        .toggle-univ {
-            background: transparent;
-            border: 1px dashed #94a3b8;
-            color: #334155;
-            padding: 6px 18px;
+        .log-section .log-header .log-actions button {
+            padding: 5px 12px;
             border-radius: 30px;
-            font-size: 13px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .toggle-univ:hover {
-            border-color: #2563eb;
-            color: #2563eb;
-            background: rgba(37, 99, 235, 0.06);
-        }
-
-        .whatsapp-tag {
-            background: #25D366;
+        .log-section .log-header .log-actions .btn-delete-log {
+            background: #dc2626;
             color: #fff;
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 40px;
-            margin-right: 6px;
-            display: inline-block;
+        }
+        .log-section .log-header .log-actions .btn-delete-log:hover {
+            background: #b91c1c;
+        }
+        .log-section .log-header .log-actions .btn-refresh-log {
+            background: #2563eb;
+            color: #fff;
+        }
+        .log-section .log-header .log-actions .btn-refresh-log:hover {
+            background: #1d4ed8;
+        }
+        .log-section .log-header .log-actions .btn-export-log {
+            background: #16a34a;
+            color: #fff;
+        }
+        .log-section .log-header .log-actions .btn-export-log:hover {
+            background: #15803d;
+        }
+        .log-section .log-header .log-actions .btn-daily-report {
+            background: #7c3aed;
+            color: #fff;
+        }
+        .log-section .log-header .log-actions .btn-daily-report:hover {
+            background: #6d28d9;
         }
 
-        /* -------------------- تنسيق عام -------------------- */
-        .container {
-            max-width: 1320px;
-            margin: 0 auto;
+        .log-table-wrap {
+            overflow-x: auto;
+            max-height: 350px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
         }
 
-        .footer {
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 500px;
+        }
+
+        .log-table th {
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 8px 12px;
+            text-align: right;
+            font-weight: 700;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .log-table td {
+            padding: 7px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        .log-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .log-table .empty-msg {
             text-align: center;
-            margin-top: 50px;
-            padding: 25px 0;
             color: #94a3b8;
+            padding: 25px;
             font-size: 14px;
-            border-top: 1px solid rgba(0,0,0,0.04);
         }
 
-        /* -------------------- استجابة للجوال -------------------- */
+        .badge-count {
+            background: #dc2626;
+            color: #fff;
+            font-size: 11px;
+            padding: 1px 9px;
+            border-radius: 30px;
+            margin-right: 4px;
+        }
+
+        /* نافذة التسعير */
+        .pricing-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .pricing-modal.active {
+            display: flex;
+        }
+
+        .pricing-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .pricing-box .pricing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .pricing-box .pricing-header h3 {
+            font-size: 22px;
+            color: #0f172a;
+        }
+
+        .pricing-box .pricing-header .close-pricing {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        .pricing-box .pricing-header .close-pricing:hover {
+            color: #dc2626;
+        }
+
+        .pricing-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pricing-item .service-name {
+            font-weight: 600;
+            color: #0f172a;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .pricing-item .service-price-input {
+            width: 100px;
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            text-align: center;
+            direction: ltr;
+        }
+
+        .pricing-item .service-price-input:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .pricing-item .price-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pricing-item .price-actions button {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pricing-item .price-actions .save-price {
+            background: #16a34a;
+            color: #fff;
+        }
+        .pricing-item .price-actions .save-price:hover {
+            background: #15803d;
+        }
+
+        .pricing-item .price-actions .reset-price {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .pricing-item .price-actions .reset-price:hover {
+            background: #d97706;
+        }
+
+        .pricing-box .add-service-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .pricing-box .add-service-area input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .pricing-box .add-service-area input:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .pricing-box .add-service-area button {
+            padding: 10px 20px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pricing-box .add-service-area button:hover {
+            background: #1d4ed8;
+        }
+
+        /* نافذة التقرير اليومي */
+        .report-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .report-modal.active {
+            display: flex;
+        }
+
+        .report-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .report-box .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .report-box .report-header h3 {
+            font-size: 20px;
+            color: #0f172a;
+        }
+
+        .report-box .report-header .close-report {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        .report-box .report-header .close-report:hover {
+            color: #dc2626;
+        }
+
+        .report-box .report-summary {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+        }
+
+        .report-box .report-summary .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 15px;
+        }
+
+        .report-box .report-summary .summary-item.total {
+            font-weight: 700;
+            font-size: 18px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 8px;
+            margin-top: 4px;
+        }
+
+        .report-box .report-details table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .report-box .report-details th {
+            background: #f1f5f9;
+            padding: 6px 10px;
+            text-align: right;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .report-box .report-details td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* نافذة تغيير الباسورد */
+        .change-password-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 10002;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .change-password-modal.active {
+            display: flex;
+        }
+
+        .change-password-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 420px;
+            width: 100%;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .change-password-box h3 {
+            font-size: 20px;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .change-password-box p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .change-password-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+            direction: ltr;
+        }
+
+        .change-password-box input:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .change-password-box .cp-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .change-password-box .cp-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .change-password-box .cp-actions .cp-confirm {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .change-password-box .cp-actions .cp-confirm:hover {
+            background: #1d4ed8;
+        }
+
+        .change-password-box .cp-actions .cp-cancel {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .change-password-box .cp-actions .cp-cancel:hover {
+            background: #cbd5e1;
+        }
+
+        .change-password-box .cp-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .change-password-box .cp-success {
+            color: #16a34a;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* نافذة الحذف */
+        .delete-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 10003;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .delete-modal.active {
+            display: flex;
+        }
+
+        .delete-modal .del-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .delete-modal .del-box h3 {
+            font-size: 22px;
+            color: #dc2626;
+            margin-bottom: 6px;
+        }
+
+        .delete-modal .del-box p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .delete-modal .del-box input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 20px;
+            text-align: center;
+            letter-spacing: 4px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            direction: ltr;
+        }
+
+        .delete-modal .del-box input:focus {
+            border-color: #dc2626;
+            outline: none;
+        }
+
+        .delete-modal .del-box .del-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .delete-modal .del-box .del-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .delete-modal .del-box .del-actions .del-confirm {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .delete-modal .del-box .del-actions .del-confirm:hover {
+            background: #b91c1c;
+        }
+
+        .delete-modal .del-box .del-actions .del-cancel {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .delete-modal .del-box .del-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* استجابة */
         @media (max-width: 700px) {
             .navbar {
                 flex-direction: column;
-                gap: 12px;
-                padding: 15px;
+                align-items: stretch;
+                padding: 12px;
             }
-            .nav-icons {
+            .navbar .logo-area {
                 justify-content: center;
             }
-            .nav-icons a {
-                font-size: 13px;
-                padding: 6px 14px;
+            .navbar .nav-icons {
+                justify-content: center;
             }
-            .section-title {
-                font-size: 19px;
+            .navbar .nav-icons a,
+            .navbar .nav-icons button {
+                font-size: 11px;
+                padding: 5px 10px;
             }
             .services-grid {
                 grid-template-columns: 1fr;
             }
-            .service-card .card-image {
-                height: 100px;
-                font-size: 40px;
+            .login-box {
+                padding: 25px 20px;
+            }
+            .pricing-box {
+                padding: 18px;
+            }
+            .log-section {
+                padding: 12px;
+            }
+            .log-table {
+                font-size: 12px;
+                min-width: 350px;
+            }
+            .animated-logo {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .pricing-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .pricing-item .service-price-input {
+                width: 100%;
             }
         }
 
-        /* سكرول جميل للجامعات */
-        .university-sub::-webkit-scrollbar {
-            width: 4px;
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            padding: 18px 0;
+            color: #94a3b8;
+            font-size: 13px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
         }
-        .university-sub::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.03);
-            border-radius: 10px;
-        }
-        .university-sub::-webkit-scrollbar-thumb {
-            background: #2563eb;
-            border-radius: 10px;
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+    <!-- ============================================================
+    شاشة تسجيل الدخول (Firebase Phone Auth)
+    ============================================================ -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+            <h2>تسجيل الدخول</h2>
+            <p>أدخل رقم هاتفك لتلقي كود التحقق</p>
 
-    <!-- ======================== الشريط العلوي ======================== -->
-    <nav class="navbar">
-        <div class="logo">
-            <small>🇪🇬</small> خدماتي <span>•</span> مصر
-        </div>
-        <div class="nav-icons">
-            <a href="https://wa.me/2010xxxxxxxx" target="_blank" class="whatsapp">
-                <i class="fab fa-whatsapp"></i> واتساب
-            </a>
-            <a href="#" class="login">
-                <i class="fas fa-user"></i> تسجيل الدخول
-            </a>
-        </div>
-    </nav>
-
-    <!-- ============================================================ -->
-    <!-- ======================== الخدمات ============================ -->
-    <!-- ============================================================ -->
-
-    <!-- 1️⃣ الكهرباء -->
-    <h2 class="section-title"><i class="fas fa-bolt"></i> الكهرباء</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-blue">
-                <i class="fas fa-bolt"></i>
-                <span class="overlay-text">رسمي</span>
+            <!-- مرحلة إدخال رقم الهاتف -->
+            <div class="phone-input-area" id="phoneInputArea">
+                <input type="tel" id="phoneInput" placeholder="مثال: 01032720236" value="01032720236" />
+                <button class="login-btn" id="sendCodeBtn" onclick="sendVerificationCode()">
+                    <i class="fas fa-paper-plane"></i> إرسال الكود
+                </button>
             </div>
-            <h3>منصة الكهرباء</h3>
-            <p>خدمات فواتير الكهرباء، طلبات التركيب، والاستعلامات</p>
-            <a href="https://eservices.eehc.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+
+            <!-- مرحلة إدخال الكود -->
+            <div class="code-input-area" id="codeInputArea">
+                <input type="text" id="codeInput" placeholder="أدخل الكود المكون من 6 أرقام" maxlength="6" />
+                <button class="login-btn" id="verifyCodeBtn" onclick="verifyCode()">
+                    <i class="fas fa-check"></i> تحقق
+                </button>
+                <button style="background:transparent;border:none;color:#2563eb;cursor:pointer;font-size:13px;margin-top:8px;" onclick="resendCode()">
+                    <i class="fas fa-redo"></i> إعادة إرسال الكود
+                </button>
+            </div>
+
+            <div class="error-msg" id="loginError">⚠️ حدث خطأ، حاول مرة أخرى</div>
+            <div class="success-msg" id="loginSuccess">✅ تم التحقق بنجاح</div>
         </div>
     </div>
 
-    <!-- 2️⃣ تصاريح السفر -->
-    <h2 class="section-title"><i class="fas fa-passport"></i> تصاريح السفر</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-green">
-                <i class="fas fa-shield-alt"></i>
-                <span class="overlay-text">رسمي</span>
-            </div>
-            <h3>تصريح سفر - الحربية</h3>
-            <p>موقع التجنيد والخدمة العسكرية</p>
-            <a href="https://tagcand.mod.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
-        </div>
-        <div class="service-card">
-            <div class="card-image img-purple">
-                <i class="fas fa-id-card"></i>
-                <span class="overlay-text">رسمي</span>
-            </div>
-            <h3>وزارة الداخلية</h3>
-            <p>تصاريح السفر، الجوازات، والأحوال المدنية</p>
-            <a href="https://moi.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
-        </div>
-    </div>
+    <!-- ============================================================
+    المحتوى الرئيسي
+    ============================================================ -->
+    <div class="main-content" id="mainContent">
 
-    <!-- 3️⃣ الجامعات -->
-    <h2 class="section-title"><i class="fas fa-university"></i> الجامعات الخاصة والأهلية</h2>
-    <div class="services-grid">
-        <div class="service-card" style="grid-column: 1 / -1;">
-            <div class="card-image img-indigo">
-                <i class="fas fa-graduation-cap"></i>
-                <span class="overlay-text">٢٧+ جامعة</span>
+        <!-- الشريط العلوي -->
+        <nav class="navbar">
+            <div class="logo-area">
+                <div class="animated-logo"><i class="fas fa-crown"></i></div>
+                <div class="logo-text">خدماتي <span>•</span> مصر</div>
             </div>
-            <h3>جميع الجامعات الخاصة والأهلية في مصر</h3>
-            <p>الجامعات المعترف بها رسمياً من وزارة التعليم العالي</p>
-            <button class="toggle-univ" onclick="toggleUniversities()">
-                <i class="fas fa-chevron-down"></i> عرض / إخفاء الجامعات
-            </button>
-            <div class="university-sub" id="univList">
-                <strong>🏛️ جامعات خاصة:</strong>
-                <a href="https://www.bue.edu.eg/" target="_blank">الجامعة البريطانية في مصر (BUE)</a>
-                <a href="https://www.guc.edu.eg/" target="_blank">الجامعة الألمانية بالقاهرة (GUC)</a>
-                <a href="https://www.miuegypt.edu.eg/" target="_blank">جامعة مصر الدولية (MIU)</a>
-                <a href="https://www.msa.edu.eg/" target="_blank">جامعة أكتوبر للعلوم الحديثة (MSA)</a>
-                <a href="https://www.fue.edu.eg/" target="_blank">جامعة المستقبل (FUE)</a>
-                <a href="https://nu.edu.eg/" target="_blank">جامعة النيل (NU)</a>
-                <a href="https://www.buc.edu.eg/" target="_blank">جامعة بدر بالقاهرة (BUC)</a>
-                <a href="https://www.ecu.edu.eg/" target="_blank">جامعة إيجبت للعلوم والتكنولوجيا</a>
-                <a href="https://www.hue.edu.eg/" target="_blank">جامعة هليوبوليس</a>
-                <a href="https://www.sue.edu.eg/" target="_blank">جامعة سيناء</a>
-                <a href="https://www.alamein.edu.eg/" target="_blank">جامعة العلمين الدولية</a>
-                <a href="https://www.giu.edu.eg/" target="_blank">الجامعة الألمانية الدولية (GIU)</a>
+            <div class="nav-icons">
+                <button onclick="openCalculator()" title="آلة حاسبة">
+                    <i class="fas fa-calculator"></i> حاسبة
+                </button>
+                <button class="pricing-btn" onclick="openPricing()">
+                    <i class="fas fa-tags"></i> تسعير
+                </button>
+                <a href="https://wa.me/2010xxxxxxxx" target="_blank" class="whatsapp">
+                    <i class="fab fa-whatsapp"></i> واتساب
+                </a>
+                <button onclick="openChangePassword()">
+                    <i class="fas fa-key"></i> تغيير باسورد
+                </button>
+                <button onclick="handleLogout()" class="logout">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+        </nav>
 
-                <strong>🏛️ جامعات أهلية:</strong>
-                <a href="https://www.aun.edu.eg/" target="_blank">جامعة أسيوط الأهلية</a>
-                <a href="https://www.zu.edu.eg/" target="_blank">جامعة الزقازيق الأهلية</a>
-                <a href="https://www.mans.edu.eg/" target="_blank">جامعة المنصورة الأهلية</a>
-                <a href="https://www.helwan.edu.eg/" target="_blank">جامعة حلوان الأهلية</a>
-                <a href="https://www.ksu.edu.eg/" target="_blank">جامعة كفر الشيخ الأهلية</a>
-                <a href="https://www.bsu.edu.eg/" target="_blank">جامعة بنها الأهلية</a>
-                <a href="https://www.svu.edu.eg/" target="_blank">جامعة جنوب الوادي الأهلية</a>
-                <a href="https://www.damanhour.edu.eg/" target="_blank">جامعة دمنهور الأهلية</a>
-                <a href="https://www.portsaid.edu.eg/" target="_blank">جامعة بورسعيد الأهلية</a>
-                <a href="https://www.luxor.edu.eg/" target="_blank">جامعة الأقصر الأهلية</a>
-                <a href="https://www.minia.edu.eg/" target="_blank">جامعة المنيا الأهلية</a>
-                <a href="https://www.sohag.edu.eg/" target="_blank">جامعة سوهاج الأهلية</a>
-                <a href="https://www.fayoum.edu.eg/" target="_blank">جامعة الفيوم الأهلية</a>
-                <a href="https://www.benisuef.edu.eg/" target="_blank">جامعة بني سويف الأهلية</a>
+        <!-- ============================================================
+        الخدمات (سيتم تحميلها ديناميكياً من Firebase)
+        ============================================================ -->
+        <div id="servicesContainer">
+            <div class="text-center" style="padding:40px;color:#94a3b8;">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p style="margin-top:10px;">جاري تحميل الخدمات...</p>
             </div>
         </div>
-    </div>
 
-    <!-- 4️⃣ الوظائف -->
-    <h2 class="section-title"><i class="fas fa-briefcase"></i> الوظائف</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-teal">
-                <i class="fas fa-building"></i>
-                <span class="overlay-text">رسمي</span>
+        <!-- ============================================================
+        سجل الخدمات
+        ============================================================ -->
+        <div class="log-section" id="logSection">
+            <div class="log-header">
+                <h3>
+                    <i class="fas fa-history"></i>
+                    سجل الخدمات
+                    <span class="badge-count" id="logCount">0</span>
+                </h3>
+                <div class="log-actions">
+                    <button class="btn-daily-report" onclick="openDailyReport()">
+                        <i class="fas fa-chart-bar"></i> جرد اليوم
+                    </button>
+                    <button class="btn-refresh-log" onclick="loadLogs()">
+                        <i class="fas fa-sync-alt"></i> تحديث
+                    </button>
+                    <button class="btn-export-log" onclick="exportLogs()">
+                        <i class="fas fa-download"></i> تصدير
+                    </button>
+                    <button class="btn-delete-log" onclick="openDeleteModal()">
+                        <i class="fas fa-trash"></i> حذف السجل
+                    </button>
+                </div>
             </div>
-            <h3>الوظائف الحكومية</h3>
-            <p>بوابة التوظيف الحكومي المصرية</p>
-            <a href="https://jobs.caoa.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+            <div class="log-table-wrap">
+                <table class="log-table" id="logTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>التاريخ</th>
+                            <th>الوقت</th>
+                            <th>اسم العميل</th>
+                            <th>الخدمة</th>
+                            <th>السعر</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logBody">
+                        <tr><td colspan="6" class="empty-msg">لا توجد خدمات مسجلة</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <!-- 5️⃣ الخدمات المتكاملة -->
-    <h2 class="section-title"><i class="fas fa-cubes"></i> الخدمات المتكاملة</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-cyan">
-                <i class="fas fa-network-wired"></i>
-                <span class="overlay-text">رسمي</span>
-            </div>
-            <h3>منصة POD</h3>
-            <p>الخدمات المتكاملة للمواطنين</p>
-            <a href="https://pod.mohp.gov.eg/Inquery.aspx" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        <div class="footer">
+            © 2026 منصة خدماتي • مصر — نظام إدارة الخدمات المتكاملة
         </div>
     </div>
 
-    <!-- 6️⃣ التكافل وكرامة -->
-    <h2 class="section-title"><i class="fas fa-hand-holding-heart"></i> التكافل وكرامة</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-rose">
-                <i class="fas fa-heart"></i>
-                <span class="overlay-text">رسمي</span>
+    <!-- ============================================================
+    نافذة التسعير
+    ============================================================ -->
+    <div class="pricing-modal" id="pricingModal">
+        <div class="pricing-box">
+            <div class="pricing-header">
+                <h3><i class="fas fa-tags"></i> قائمة التسعير</h3>
+                <button class="close-pricing" onclick="closePricing()">&times;</button>
             </div>
-            <h3>المجالس الطبية وتكافل وكرامة</h3>
-            <p>خدمات المجالس الطبية المتخصصة</p>
-            <a href="http://karama.smcegy.com/karama/?par=12&id=0" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+            <div id="pricingList"></div>
+            <div class="add-service-area">
+                <input type="text" id="newServiceName" placeholder="اسم الخدمة الجديدة" />
+                <input type="number" id="newServicePrice" placeholder="السعر" style="max-width:120px;" />
+                <select id="newServiceCategory" style="padding:10px;border-radius:12px;border:2px solid #e2e8f0;">
+                    <option value="official">رسمي</option>
+                    <option value="whatsapp">واتساب</option>
+                </select>
+                <button onclick="addNewService()"><i class="fas fa-plus"></i> إضافة</button>
+            </div>
+            <div style="margin-top:12px;font-size:12px;color:#94a3b8;">
+                🔒 تغيير الأسعار يتطلب كود الحذف: <strong>015593</strong>
+            </div>
         </div>
     </div>
 
-    <!-- 7️⃣ التأمين الصحي -->
-    <h2 class="section-title"><i class="fas fa-hospital"></i> التأمين الصحي</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-red">
-                <i class="fas fa-user-md"></i>
-                <span class="overlay-text">رسمي</span>
+    <!-- ============================================================
+    نافذة التقرير اليومي
+    ============================================================ -->
+    <div class="report-modal" id="reportModal">
+        <div class="report-box">
+            <div class="report-header">
+                <h3><i class="fas fa-chart-bar"></i> جرد اليوم</h3>
+                <button class="close-report" onclick="closeReport()">&times;</button>
             </div>
-            <h3>عيادات التأمين الصحي</h3>
-            <p>حجز مواعيد العيادات التابعة للتأمين الصحي</p>
-            <a href="https://reserv.hiocdis.org/hioclinicreservation.aspx" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+            <div id="reportContent">
+                <div class="report-summary" id="reportSummary"></div>
+                <div class="report-details" id="reportDetails"></div>
+            </div>
         </div>
     </div>
 
-    <!-- 8️⃣ خدمات المعاقين -->
-    <h2 class="section-title"><i class="fas fa-wheelchair"></i> خدمات المعاقين</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-orange">
-                <i class="fas fa-car"></i>
-                <span class="overlay-text">رسمي</span>
+    <!-- ============================================================
+    نافذة تغيير الباسورد
+    ============================================================ -->
+    <div class="change-password-modal" id="changePasswordModal">
+        <div class="change-password-box">
+            <h3><i class="fas fa-key"></i> تغيير كلمة المرور</h3>
+            <p>سيتم إرسال كود تحقق إلى رقم هاتفك <span id="displayPhone">01032720236</span></p>
+            <input type="password" id="newPasswordInput" placeholder="كلمة المرور الجديدة" />
+            <input type="password" id="confirmPasswordInput" placeholder="تأكيد كلمة المرور" />
+            <div class="cp-actions">
+                <button class="cp-cancel" onclick="closeChangePassword()">إلغاء</button>
+                <button class="cp-confirm" onclick="changePassword()">تغيير</button>
             </div>
-            <h3>حجز سيارات المعاقين</h3>
-            <p>خدمة حجز وتجديد سيارات ذوي الهمم</p>
-            <a href="https://car.smcegy.com/register.aspx" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+            <div class="cp-error" id="cpError">⚠️ كود التحقق غير صحيح</div>
+            <div class="cp-success" id="cpSuccess">✅ تم تغيير كلمة المرور بنجاح</div>
         </div>
     </div>
 
-    <!-- 9️⃣ ضباط الاحتياط -->
-    <h2 class="section-title"><i class="fas fa-star"></i> ضباط الاحتياط</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-pink">
-                <i class="fas fa-medal"></i>
-                <span class="overlay-text">رسمي</span>
+    <!-- ============================================================
+    نافذة حذف السجل
+    ============================================================ -->
+    <div class="delete-modal" id="deleteModal">
+        <div class="del-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> تأكيد الحذف</h3>
+            <p>أدخل كود التأكيد لحذف سجل الخدمات بالكامل</p>
+            <input type="password" id="deleteCodeInput" maxlength="6" placeholder="••••••" />
+            <div class="del-actions">
+                <button class="del-cancel" onclick="closeDeleteModal()">إلغاء</button>
+                <button class="del-confirm" onclick="confirmDeleteLogs()">حذف الكل</button>
             </div>
-            <h3>خدمات ضباط الاحتياط</h3>
-            <p>الاستعلامات والخدمات الإلكترونية لضباط الاحتياط</p>
-            <a href="https://officersaffairs.mod.gov.eg/ServicesApplication.aspx?serv=2" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+            <div class="del-error" id="deleteError">⚠️ كود التأكيد غير صحيح</div>
         </div>
     </div>
 
-    <!-- 🔟 الكليات العسكرية -->
-    <h2 class="section-title"><i class="fas fa-shield-alt"></i> الكليات العسكرية</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-amber">
-                <i class="fas fa-trophy"></i>
-                <span class="overlay-text">رسمي</span>
+    <!-- ============================================================
+    الآلة الحاسبة (Modal)
+    ============================================================ -->
+    <div class="pricing-modal" id="calcModal" style="z-index:9999;">
+        <div class="pricing-box" style="max-width:380px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h3><i class="fas fa-calculator"></i> آلة حاسبة</h3>
+                <button onclick="closeCalculator()" style="background:none;border:none;font-size:28px;cursor:pointer;color:#94a3b8;">&times;</button>
             </div>
-            <h3>التنسيق العسكري</h3>
-            <p>الكليات الحربية والعسكرية</p>
-            <a href="https://tansiq.mod.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+            <input id="calcDisplay" readonly style="width:100%;padding:16px;font-size:28px;text-align:right;border:2px solid #e2e8f0;border-radius:14px;margin-bottom:12px;background:#f8fafc;font-weight:600;direction:ltr;" value="0" />
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+                <button onclick="calcInput('7')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">7</button>
+                <button onclick="calcInput('8')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">8</button>
+                <button onclick="calcInput('9')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">9</button>
+                <button onclick="calcInput('/')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#2563eb;color:#fff;">÷</button>
+                <button onclick="calcInput('4')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">4</button>
+                <button onclick="calcInput('5')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">5</button>
+                <button onclick="calcInput('6')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">6</button>
+                <button onclick="calcInput('*')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#2563eb;color:#fff;">×</button>
+                <button onclick="calcInput('1')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">1</button>
+                <button onclick="calcInput('2')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">2</button>
+                <button onclick="calcInput('3')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">3</button>
+                <button onclick="calcInput('-')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#2563eb;color:#fff;">−</button>
+                <button onclick="calcInput('0')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">0</button>
+                <button onclick="calcInput('.')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#f1f5f9;">.</button>
+                <button onclick="calcClear()" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#dc2626;color:#fff;">C</button>
+                <button onclick="calcInput('+')" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#2563eb;color:#fff;">+</button>
+                <button onclick="calcResult()" style="padding:16px;font-size:20px;border:none;border-radius:12px;cursor:pointer;background:#16a34a;color:#fff;grid-column:span 2;">=</button>
+            </div>
         </div>
     </div>
 
-    <!-- 1️⃣1️⃣ خدمات الطلاب -->
-    <h2 class="section-title"><i class="fas fa-user-graduate"></i> خدمات الطلاب</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-lime">
-                <i class="fas fa-envelope"></i>
-                <span class="overlay-text">رسمي</span>
-            </div>
-            <h3>الحساب الموحد للطالب</h3>
-            <p>خدمات Office 365 للطلاب</p>
-            <a href="https://office365.emis.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
-        </div>
-        <div class="service-card">
-            <div class="card-image img-blue">
-                <i class="fas fa-school"></i>
-                <span class="overlay-text">رسمي</span>
-            </div>
-            <h3>الثانوية العامة</h3>
-            <p>خدمات التنسيق والنتائج</p>
-            <a href="https://tansiksec.emis.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
-        </div>
-    </div>
+    <!-- ============================================================
+    جافا سكريبت
+    ============================================================ -->
+    <script>
+        // ============================================================
+        // إعدادات Firebase (استبدل هذه بالقيم الخاصة بك)
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-    <!-- ============================================================ -->
-    <!-- =============== خدمات التصميم (ورد، إكسيل، باوربوينت) ============== -->
-    <!-- ============================================================ -->
-    <h2 class="section-title"><i class="fas fa-pen-fancy"></i> خدمات التصميم والتحرير</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-blue">
-                <i class="fas fa-file-word"></i>
-                <span class="overlay-text">واتساب</span>
-            </div>
-            <h3>كتابة وتنسيق وورد</h3>
-            <p>كتابة تقارير، بحوث، تنسيق مستندات Word باحترافية</p>
-            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20تنسيق%20ورد" target="_blank" class="btn-service btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
-            </a>
-        </div>
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        <div class="service-card">
-            <div class="card-image img-green">
-                <i class="fas fa-file-excel"></i>
-                <span class="overlay-text">واتساب</span>
-            </div>
-            <h3>جداول إكسيل احترافية</h3>
-            <p>عمل جداول بيانات، معادلات، تحليلات، ورسوم بيانية</p>
-            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20إكسيل" target="_blank" class="btn-service btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
-            </a>
-        </div>
+        // ============================================================
+        // متغيرات عامة
+        // ============================================================
+        let confirmationResult = null;
+        const DELETE_CODE = '015593';
+        const ADMIN_PHONE = '+201032720236';
+        let currentUser = null;
 
-        <div class="service-card">
-            <div class="card-image img-red">
-                <i class="fas fa-file-powerpoint"></i>
-                <span class="overlay-text">واتساب</span>
-            </div>
-            <h3>عروض باوربوينت</h3>
-            <p>تصميم عروض تقديمية احترافية وجذابة</p>
-            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20باوربوينت" target="_blank" class="btn-service btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
-            </a>
-        </div>
+        // ============================================================
+        // 1️⃣ تسجيل الدخول برقم الهاتف (Firebase Phone Auth)
+        // ============================================================
+        function sendVerificationCode() {
+            const phone = document.getElementById('phoneInput').value.trim();
+            const error = document.getElementById('loginError');
+            const success = document.getElementById('loginSuccess');
+            const btn = document.getElementById('sendCodeBtn');
 
-        <div class="service-card">
-            <div class="card-image img-purple">
-                <i class="fas fa-file-alt"></i>
-                <span class="overlay-text">واتساب</span>
-            </div>
-            <h3>السير الذاتية - Canva</h3>
-            <p>تصميم سير ذاتية كلاسيكية ومتوافقة مع ATS</p>
-            <a href="https://www.canva.com/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
-        </div>
-    </div>
+            if (phone.length < 10) {
+                error.textContent = '⚠️ من فضلك أدخل رقم هاتف صحيح';
+                error.classList.add('show');
+                return;
+            }
 
-    <!-- ============================================================ -->
-    <!-- =============== خدمات السفر (تساهيل، إنجاز، الطيران) ============== -->
-    <!-- ============================================================ -->
-    <h2 class="section-title"><i class="fas fa-plane"></i> خدمات السفر والسياحة</h2>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-image img-teal">
-                <i class="fas fa-umbrella-beach"></i>
-                <span class="overlay-text">واتساب</span>
-            </div>
-            <h3>تساهيل للسفر</h3>
-            <p>حجز فنادق، تذاكر طيران، برامج سياحية بأسعار مخفضة</p>
-            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20تساهيل" target="_blank" class="btn-service btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
-            </a>
-        </div>
+            error.classList.remove('show');
+            success.classList.remove('show');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
 
-        <div class="service-card">
-            <div class="card-image img-orange">
-                <i class="fas fa-rocket"></i>
-                <span class="overlay-text">واتساب</span>
-            </div>
-            <h3>إنجاز للسفر</h3>
-            <p>إنهاء إجراءات السفر، تأشيرات، واستخراج تصاريح</p>
-            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20إنجاز" target="_blank" class="btn-service btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
-            </a>
-        </div>
+            const phoneNumber = '+20' + phone;
 
-        <div class="service-card">
-            <div class="card-image img-cyan">
-                <i class="fas fa-fighter-jet"></i>
-                <span class="overlay-text">واتساب</span>
-            </div>
-            <h3>حجز الطيران</h3>
-            <p>حجز تذاكر طيران داخلي ودولي بأفضل الأسعار</p>
-            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20حجز%20طيران" target="_blank" class="btn-service btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
-            </a>
-        </div>
-
-        <div class="service-card">
-            <div class="card-image img-pink">
-                <i class="fas fa-hotel"></i>
-                <span class="overlay-text">واتساب</span>
-            </div>
-            <h3>حجز فنادق ومنتجعات</h3>
-            <p>أفضل عروض الفنادق والمنتجعات في مصر والعالم</p>
-            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20حجز%20فندق" target="_blank" class="btn-service btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
-            </a>
-        </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- ======================== الفوتر ============================ -->
-    <!-- ============================================================ -->
-    <div class="footer">
-        © 2026 منصة خدماتي • مصر — جميع الخدمات موجهة للمواقع الرسمية <br>
-        <span style="font-size:12px;color:#b0b8c5;">
-            <i class="fab fa-whatsapp" style="color:#25D366;"></i> للدعم الفني تواصل عبر واتساب
-        </span>
-    </div>
-
-</div>
-
-<!-- ======================== جافا سكريبت ======================== -->
-<script>
-    // دالة عرض/إخفاء قائمة الجامعات
-    function toggleUniversities() {
-        const list = document.getElementById('univList');
-        list.classList.toggle('active');
-        
-        const btn = document.querySelector('.toggle-univ');
-        if (list.classList.contains('active')) {
-            btn.innerHTML = '<i class="fas fa-chevron-up"></i> إخفاء الجامعات';
-        } else {
-            btn.innerHTML = '<i class="fas fa-chevron-down"></i> عرض / إخفاء الجامعات';
+            auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+                .then(function(result) {
+                    confirmationResult = result;
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الكود';
+                    document.getElementById('phoneInputArea').classList.add('hidden');
+                    document.getElementById('codeInputArea').classList.add('active');
+                    success.textContent = '✅ تم إرسال الكود إلى رقمك';
+                    success.classList.add('show');
+                })
+                .catch(function(error) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الكود';
+                    error.textContent = '⚠️ ' + error.message;
+                    error.classList.add('show');
+                    console.error('خطأ في إرسال الكود:', error);
+                });
         }
-    }
 
-    // توجيه رسائل واتساب مع نص مخصص
-    document.querySelectorAll('.btn-whatsapp').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            // الرسالة هتتفتح في واتساب بالтекست الموجود في الرابط
-            console.log('جاري التوجيه إلى واتساب...');
+        function verifyCode() {
+            const code = document.getElementById('codeInput').value.trim();
+            const error = document.getElementById('loginError');
+            const success = document.getElementById('loginSuccess');
+            const btn = document.getElementById('verifyCodeBtn');
+
+            if (!code || code.length < 6) {
+                error.textContent = '⚠️ من فضلك أدخل الكود المكون من 6 أرقام';
+                error.classList.add('show');
+                return;
+            }
+
+            error.classList.remove('show');
+            success.classList.remove('show');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
+
+            confirmationResult.confirm(code)
+                .then(function(result) {
+                    currentUser = result.user;
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check"></i> تحقق';
+                    success.textContent = '✅ تم التحقق بنجاح! جاري الدخول...';
+                    success.classList.add('show');
+
+                    setTimeout(function() {
+                        document.getElementById('loginScreen').classList.add('hidden');
+                        document.getElementById('mainContent').classList.add('active');
+                        loadServices();
+                        loadLogs();
+                    }, 1000);
+                })
+                .catch(function(error) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check"></i> تحقق';
+                    error.textContent = '⚠️ الكود غير صحيح أو منتهي الصلاحية';
+                    error.classList.add('show');
+                    console.error('خطأ في التحقق:', error);
+                });
+        }
+
+        function resendCode() {
+            document.getElementById('phoneInputArea').classList.remove('hidden');
+            document.getElementById('codeInputArea').classList.remove('active');
+            document.getElementById('codeInput').value = '';
+            document.getElementById('loginSuccess').classList.remove('show');
+            document.getElementById('loginError').classList.remove('show');
+            sendVerificationCode();
+        }
+
+        // تهيئة reCAPTCHA
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sendCodeBtn', {
+            size: 'invisible',
+            callback: function() {
+                // تم حل reCAPTCHA
+            }
         });
-    });
-</script>
+
+        // ============================================================
+        // 2️⃣ تحميل الخدمات من Firebase مع الأسعار
+        // ============================================================
+        async function loadServices() {
+            const container = document.getElementById('servicesContainer');
+
+            try {
+                const snapshot = await db.collection('services').orderBy('category').get();
+
+                if (snapshot.empty) {
+                    // إضافة خدمات افتراضية إذا كانت فارغة
+                    await seedDefaultServices();
+                    return loadServices();
+                }
+
+                let html = '';
+                let currentCategory = '';
+
+                snapshot.forEach(doc => {
+                    const service = doc.data();
+                    const id = doc.id;
+
+                    if (service.category !== currentCategory) {
+                        currentCategory = service.category;
+                        const categoryName = getCategoryName(currentCategory);
+                        html += `
+                                <h2 class="section-title">
+                                    <i class="fas ${getCategoryIcon(currentCategory)}"></i> 
+                                    ${categoryName}
+                                </h2>
+                                <div class="services-grid">
+                            `;
+                    }
+
+                    const priceDisplay = service.price ? `${service.price} ج.م` : 'مجاني';
+                    const btnClass = service.type === 'whatsapp' ? 'btn-whatsapp' : '';
+                    const linkTarget = service.type === 'whatsapp' ?
+                        `https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20${encodeURIComponent(service.name)}` :
+                        service.link || '#';
+
+                    html += `
+                            <div class="service-card" data-service="${service.name}" data-price="${service.price || 0}">
+                                <div class="card-image ${service.color || 'img-blue'}">
+                                    <i class="fas ${service.icon || 'fa-cube'}"></i>
+                                    <span class="overlay-text">${service.type === 'whatsapp' ? 'واتساب' : 'رسمي'}</span>
+                                </div>
+                                <h3>${service.name}</h3>
+                                <div class="price-tag">💰 ${priceDisplay}</div>
+                                <p>${service.description || ''}</p>
+                                <a href="${linkTarget}" target="_blank" class="btn-service ${btnClass}" onclick="logServiceFromCard(this, '${service.name}', ${service.price || 0})">
+                                    ${service.type === 'whatsapp' ? '<i class="fab fa-whatsapp"></i> تواصل عبر واتساب' : 'انتقل للخدمة <i class="fas fa-arrow-left"></i>'}
+                                </a>
+                            </div>
+                        `;
+
+                    // إغلاق الـ grid بعد كل 4 خدمات
+                    if (snapshot.docs.indexOf(doc) === snapshot.docs.length - 1 ||
+                        snapshot.docs[snapshot.docs.indexOf(doc) + 1]?.data().category !== currentCategory) {
+                        html += `</div>`;
+                    }
+                });
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('خطأ في تحميل الخدمات:', error);
+                container.innerHTML = `
+                        <div class="text-center" style="padding:40px;color:#dc2626;">
+                            <i class="fas fa-exclamation-circle fa-2x"></i>
+                            <p style="margin-top:10px;">حدث خطأ في تحميل الخدمات: ${error.message}</p>
+                            <button onclick="loadServices()" style="margin-top:10px;padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:10px;cursor:pointer;">إعادة المحاولة</button>
+                        </div>
+                    `;
+            }
+        }
+
+        // ============================================================
+        // 3️⃣ إضافة خدمة جديدة (من نافذة التسعير)
+        // ============================================================
+        async function addNewService() {
+            const name = document.getElementById('newServiceName').value.trim();
+            const price = parseFloat(document.getElementById('newServicePrice').value);
+            const category = document.getElementById('newServiceCategory').value;
+
+            if (!name) {
+                alert('⚠️ من فضلك أدخل اسم الخدمة');
+                return;
+            }
+
+            if (isNaN(price) || price < 0) {
+                alert('⚠️ من فضلك أدخل سعر صحيح');
+                return;
+            }
+
+            try {
+                await db.collection('services').add({
+                    name: name,
+                    price: price,
+                    category: category,
+                    type: category === 'whatsapp' ? 'whatsapp' : 'official',
+                    link: '#',
+                    icon: 'fa-cube',
+                    color: 'img-blue',
+                    description: 'تمت الإضافة يدوياً',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                document.getElementById('newServiceName').value = '';
+                document.getElementById('newServicePrice').value = '';
+                alert('✅ تمت إضافة الخدمة بنجاح');
+                loadServices();
+                loadPricingList();
+            } catch (error) {
+                alert('❌ حدث خطأ: ' + error.message);
+            }
+        }
+
+        // ============================================================
+        // 4️⃣ نافذة التسعير (عرض وتعديل الأسعار)
+        // ============================================================
+        async function openPricing() {
+            document.getElementById('pricingModal').classList.add('active');
+            await loadPricingList();
+        }
+
+        function closePricing() {
+            document.getElementById('pricingModal').classList.remove('active');
+        }
+
+        async function loadPricingList() {
+            const container = document.getElementById('pricingList');
+
+            try {
+                const snapshot = await db.collection('services').orderBy('name').get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا توجد خدمات مسجلة</p>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const service = doc.data();
+                    const id = doc.id;
+                    html += `
+                            <div class="pricing-item">
+                                <span class="service-name">${service.name}</span>
+                                <input type="number" class="service-price-input" id="price_${id}" value="${service.price || 0}" step="0.01" />
+                                <div class="price-actions">
+                                    <button class="save-price" onclick="updateServicePrice('${id}')">
+                                        <i class="fas fa-save"></i> حفظ
+                                    </button>
+                                    <button class="reset-price" onclick="deleteService('${id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                });
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                container.innerHTML = `<p style="color:#dc2626;">خطأ: ${error.message}</p>`;
+            }
+        }
+
+        async function updateServicePrice(serviceId) {
+            const input = document.getElementById(`price_${serviceId}`);
+            if (!input) return;
+
+            const price = parseFloat(input.value);
+
+            if (isNaN(price) || price < 0) {
+                alert('⚠️ من فضلك أدخل سعر صحيح');
+                return;
+            }
+
+            try {
+                await db.collection('services').doc(serviceId).update({
+                    price: price,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert('✅ تم تحديث السعر بنجاح');
+                loadPricingList();
+            } catch (error) {
+                alert('❌ حدث خطأ: ' + error.message);
+            }
+        }
+
+        async function deleteService(serviceId) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذه الخدمة؟')) return;
+
+            try {
+                await db.collection('services').doc(serviceId).delete();
+                alert('✅ تم حذف الخدمة بنجاح');
+                loadPricingList();
+                loadServices();
+            } catch (error) {
+                alert('❌ حدث خطأ: ' + error.message);
+            }
+        }
+
+        // ============================================================
+        // 5️⃣ تسجيل الخدمة في السجل
+        // ============================================================
+        async function logServiceFromCard(element, serviceName, price) {
+            const clientName = prompt('📝 أدخل اسم العميل:', 'عميل');
+            if (clientName === null) return;
+
+            try {
+                await db.collection('dailyLogs').add({
+                    date: new Date().toLocaleDateString('ar-EG'),
+                    time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    client: clientName || 'عميل',
+                    service: serviceName,
+                    price: price || 0
+                });
+
+                loadLogs();
+            } catch (error) {
+                console.error('خطأ في تسجيل الخدمة:', error);
+            }
+        }
+
+        // ============================================================
+        // 6️⃣ تحميل سجل الخدمات
+        // ============================================================
+        async function loadLogs() {
+            const tbody = document.getElementById('logBody');
+            const count = document.getElementById('logCount');
+
+            try {
+                const snapshot = await db.collection('dailyLogs')
+                    .orderBy('timestamp', 'desc')
+                    .limit(500)
+                    .get();
+
+                if (snapshot.empty) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">📭 لا توجد خدمات مسجلة</td></tr>`;
+                    count.textContent = '0';
+                    return;
+                }
+
+                let html = '';
+                let index = 1;
+                let totalPrice = 0;
+
+                snapshot.forEach(doc => {
+                    const log = doc.data();
+                    const price = log.price || 0;
+                    totalPrice += price;
+
+                    html += `
+                            <tr>
+                                <td>${index}</td>
+                                <td>${log.date || '-'}</td>
+                                <td>${log.time || '-'}</td>
+                                <td>${log.client || 'عميل'}</td>
+                                <td>${log.service || '-'}</td>
+                                <td>${price} ج.م</td>
+                            </tr>
+                        `;
+                    index++;
+                });
+
+                // إضافة صف الإجمالي
+                html += `
+                        <tr style="font-weight:700;background:#f1f5f9;">
+                            <td colspan="5" style="text-align:left;">إجمالي اليوم</td>
+                            <td>${totalPrice} ج.م</td>
+                        </tr>
+                    `;
+
+                tbody.innerHTML = html;
+                count.textContent = snapshot.size;
+
+            } catch (error) {
+                console.error('خطأ في تحميل السجل:', error);
+                tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">❌ خطأ في تحميل السجل</td></tr>`;
+            }
+        }
+
+        // ============================================================
+        // 7️⃣ التقرير اليومي (جرد اليوم)
+        // ============================================================
+        async function openDailyReport() {
+            document.getElementById('reportModal').classList.add('active');
+
+            const today = new Date().toLocaleDateString('ar-EG');
+            const summary = document.getElementById('reportSummary');
+            const details = document.getElementById('reportDetails');
+
+            try {
+                const snapshot = await db.collection('dailyLogs')
+                    .where('date', '==', today)
+                    .get();
+
+                if (snapshot.empty) {
+                    summary.innerHTML = `
+                            <div class="summary-item">📭 لا توجد خدمات اليوم</div>
+                        `;
+                    details.innerHTML = '';
+                    return;
+                }
+
+                let total = 0;
+                let serviceCount = {};
+                let html = '';
+
+                snapshot.forEach(doc => {
+                    const log = doc.data();
+                    const price = log.price || 0;
+                    total += price;
+
+                    if (serviceCount[log.service]) {
+                        serviceCount[log.service]++;
+                    } else {
+                        serviceCount[log.service] = 1;
+                    }
+                });
+
+                // ملخص
+                summary.innerHTML = `
+                        <div class="summary-item"><span>📅 التاريخ:</span> <span>${today}</span></div>
+                        <div class="summary-item"><span>📊 عدد الخدمات:</span> <span>${snapshot.size}</span></div>
+                        <div class="summary-item total"><span>💰 إجمالي الإيرادات:</span> <span>${total} ج.م</span></div>
+                    `;
+
+                // تفاصيل الخدمات
+                let detailHtml = `
+                        <table>
+                            <thead><tr><th>الخدمة</th><th>العدد</th><th>الإجمالي</th></tr></thead>
+                            <tbody>
+                        `;
+
+                let servicePrices = {};
+                // نجيب أسعار الخدمات من مجموعة services
+                const servicesSnapshot = await db.collection('services').get();
+                servicesSnapshot.forEach(doc => {
+                    const s = doc.data();
+                    servicePrices[s.name] = s.price || 0;
+                });
+
+                for (const [service, count] of Object.entries(serviceCount)) {
+                    const price = servicePrices[service] || 0;
+                    detailHtml += `
+                            <tr>
+                                <td>${service}</td>
+                                <td>${count}</td>
+                                <td>${price * count} ج.م</td>
+                            </tr>
+                        `;
+                }
+
+                detailHtml += `</tbody></table>`;
+                details.innerHTML = detailHtml;
+
+            } catch (error) {
+                summary.innerHTML = `<div class="summary-item" style="color:#dc2626;">❌ خطأ: ${error.message}</div>`;
+            }
+        }
+
+        function closeReport() {
+            document.getElementById('reportModal').classList.remove('active');
+        }
+
+        // ============================================================
+        // 8️⃣ تصدير السجل
+        // ============================================================
+        async function exportLogs() {
+            try {
+                const snapshot = await db.collection('dailyLogs')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+
+                if (snapshot.empty) {
+                    alert('📭 لا توجد سجلات لتصديرها');
+                    return;
+                }
+
+                let csv = 'التاريخ,الوقت,اسم العميل,الخدمة,السعر\n';
+                snapshot.forEach(doc => {
+                    const log = doc.data();
+                    csv +=
+                        `"${log.date || '-'}","${log.time || '-'}","${log.client || 'عميل'}","${log.service || '-'}",${log.price || 0}\n`;
+                });
+
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = `سجل_الخدمات_${new Date().toLocaleDateString('ar-EG')}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+            } catch (error) {
+                alert('❌ حدث خطأ: ' + error.message);
+            }
+        }
+
+        // ============================================================
+        // 9️⃣ حذف السجل بكود أمان
+        // ============================================================
+        function openDeleteModal() {
+            document.getElementById('deleteModal').classList.add('active');
+            document.getElementById('deleteCodeInput').value = '';
+            document.getElementById('deleteError').classList.remove('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        async function confirmDeleteLogs() {
+            const code = document.getElementById('deleteCodeInput').value.trim();
+            const error = document.getElementById('deleteError');
+
+            if (code !== DELETE_CODE) {
+                error.classList.add('show');
+                document.getElementById('deleteCodeInput').value = '';
+                setTimeout(() => error.classList.remove('show'), 3000);
+                return;
+            }
+
+            try {
+                const snapshot = await db.collection('dailyLogs').get();
+                const batch = db.batch();
+
+                snapshot.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+
+                await batch.commit();
+                alert('✅ تم حذف جميع السجلات بنجاح');
+                closeDeleteModal();
+                loadLogs();
+            } catch (error) {
+                alert('❌ حدث خطأ: ' + error.message);
+            }
+        }
+
+        // ============================================================
+        // 🔟 تغيير كلمة المرور
+        // ============================================================
+        function openChangePassword() {
+            document.getElementById('changePasswordModal').classList.add('active');
+            document.getElementById('newPasswordInput').value = '';
+            document.getElementById('confirmPasswordInput').value = '';
+            document.getElementById('cpError').classList.remove('show');
+            document.getElementById('cpSuccess').classList.remove('show');
+            document.getElementById('displayPhone').textContent = document.getElementById('phoneInput').value || '01032720236';
+        }
+
+        function closeChangePassword() {
+            document.getElementById('changePasswordModal').classList.remove('active');
+        }
+
+        async function changePassword() {
+            const newPass = document.getElementById('newPasswordInput').value.trim();
+            const confirmPass = document.getElementById('confirmPasswordInput').value.trim();
+            const error = document.getElementById('cpError');
+            const success = document.getElementById('cpSuccess');
+
+            error.classList.remove('show');
+            success.classList.remove('show');
+
+            if (newPass.length < 8) {
+                error.textContent = '⚠️ كلمة المرور يجب أن تكون 8 أحرف على الأقل';
+                error.classList.add('show');
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                error.textContent = '⚠️ كلمة المرور غير متطابقة';
+                error.classList.add('show');
+                return;
+            }
+
+            try {
+                // تغيير كلمة المرور في Firebase
+                const user = auth.currentUser;
+                if (user) {
+                    await user.updatePassword(newPass);
+                    success.textContent = '✅ تم تغيير كلمة المرور بنجاح';
+                    success.classList.add('show');
+                    setTimeout(closeChangePassword, 2000);
+                } else {
+                    error.textContent = '⚠️ الرجاء تسجيل الدخول أولاً';
+                    error.classList.add('show');
+                }
+            } catch (err) {
+                error.textContent = '⚠️ ' + err.message;
+                error.classList.add('show');
+            }
+        }
+
+        // ============================================================
+        // 1️⃣1️⃣ تسجيل الخروج
+        // ============================================================
+        function handleLogout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                auth.signOut().then(() => {
+                    document.getElementById('mainContent').classList.remove('active');
+                    document.getElementById('loginScreen').classList.remove('hidden');
+                    document.getElementById('phoneInputArea').classList.remove('hidden');
+                    document.getElementById('codeInputArea').classList.remove('active');
+                    document.getElementById('codeInput').value = '';
+                });
+            }
+        }
+
+        // ============================================================
+        // 1️⃣2️⃣ الآلة الحاسبة
+        // ============================================================
+        let calcValue = '0';
+
+        function openCalculator() {
+            document.getElementById('calcModal').classList.add('active');
+        }
+
+        function closeCalculator() {
+            document.getElementById('calcModal').classList.remove('active');
+        }
+
+        function calcInput(val) {
+            const display = document.getElementById('calcDisplay');
+            if (calcValue === '0' && val !== '.' && val !== '+' && val !== '-' && val !== '*' && val !== '/') {
+                calcValue = val;
+            } else {
+                calcValue += val;
+            }
+            display.value = calcValue;
+        }
+
+        function calcClear() {
+            calcValue = '0';
+            document.getElementById('calcDisplay').value = '0';
+        }
+
+        function calcResult() {
+            try {
+                const result = eval(calcValue.replace(/×/g, '*').replace(/÷/g, '/'));
+                calcValue = String(result);
+                document.getElementById('calcDisplay').value = calcValue;
+            } catch (e) {
+                document.getElementById('calcDisplay').value = 'خطأ';
+                setTimeout(() => { calcValue = '0';
+                    document.getElementById('calcDisplay').value = '0'; }, 1000);
+            }
+        }
+
+        // ============================================================
+        // 1️⃣3️⃣ دوال مساعدة
+        // ============================================================
+        function getCategoryName(category) {
+            const map = {
+                'official': 'خدمات رسمية',
+                'whatsapp': 'خدمات عبر واتساب',
+                'electricity': 'الكهرباء',
+                'travel': 'تصاريح السفر',
+                'university': 'الجامعات',
+                'jobs': 'الوظائف',
+                'health': 'الصحة والتأمين',
+                'students': 'خدمات الطلاب',
+                'design': 'خدمات التصميم',
+                'military': 'الخدمات العسكرية'
+            };
+            return map[category] || category;
+        }
+
+        function getCategoryIcon(category) {
+            const map = {
+                'official': 'fa-building',
+                'whatsapp': 'fa-whatsapp',
+                'electricity': 'fa-bolt',
+                'travel': 'fa-passport',
+                'university': 'fa-university',
+                'jobs': 'fa-briefcase',
+                'health': 'fa-hospital',
+                'students': 'fa-user-graduate',
+                'design': 'fa-pen-fancy',
+                'military': 'fa-shield-alt'
+            };
+            return map[category] || 'fa-cube';
+        }
+
+        // ============================================================
+        // 1️⃣4️⃣ إضافة خدمات افتراضية (للبدء)
+        // ============================================================
+        async function seedDefaultServices() {
+            const services = [
+                { name: 'منصة الكهرباء', price: 50, category: 'electricity', type: 'official', icon: 'fa-bolt',
+                    color: 'img-blue', description: 'خدمات فواتير الكهرباء والاستعلامات' },
+                { name: 'تصريح سفر - الحربية', price: 100, category: 'travel', type: 'official', icon: 'fa-shield-alt',
+                    color: 'img-green', description: 'موقع التجنيد والخدمة العسكرية' },
+                { name: 'وزارة الداخلية', price: 80, category: 'travel', type: 'official', icon: 'fa-id-card',
+                    color: 'img-purple', description: 'تصاريح السفر والجوازات' },
+                { name: 'الوظائف الحكومية', price: 60, category: 'jobs', type: 'official', icon: 'fa-building',
+                    color: 'img-teal', description: 'بوابة التوظيف الحكومي' },
+                { name: 'منصة POD', price: 40, category: 'official', type: 'official', icon: 'fa-network-wired',
+                    color: 'img-cyan', description: 'الخدمات المتكاملة للمواطنين' },
+                { name: 'عيادات التأمين الصحي', price: 30, category: 'health', type: 'official', icon: 'fa-user-md',
+                    color: 'img-red', description: 'حجز مواعيد العيادات' },
+                { name: 'الحساب الموحد للطالب', price: 20, category: 'students', type: 'official', icon: 'fa-envelope',
+                    color: 'img-lime', description: 'خدمات Office 365 للطلاب' },
+                { name: 'خدمة وورد', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-word',
+                    color: 'img-blue', description: 'كتابة وتنسيق مستندات Word' },
+                { name: 'خدمة إكسيل', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-excel',
+                    color: 'img-green', description: 'جداول بيانات وتحليلات' },
+                { name: 'خدمة باوربوينت', price: 200, category: 'design', type: 'whatsapp', icon: 'fa-file-powerpoint',
+                    color: 'img-red', description: 'عروض تقديمية احترافية' },
+                { name: 'تساهيل للسفر', price: 250, category: 'travel', type: 'whatsapp', icon: 'fa-umbrella-beach',
+                    color: 'img-teal', description: 'حجز فنادق وبرامج سياحية' },
+                { name: 'إنجاز للسفر', price: 300, category: 'travel', type: 'whatsapp', icon: 'fa-rocket',
+                    color: 'img-orange', description: 'إنهاء إجراءات السفر' },
+                { name: 'حجز الطيران', price: 200, category: 'travel', type: 'whatsapp', icon: 'fa-fighter-jet',
+                    color: 'img-cyan', description: 'حجز تذاكر طيران' },
+            ];
+
+            try {
+                for (const service of services) {
+                    await db.collection('services').add(service);
+                }
+                console.log('✅ تمت إضافة الخدمات الافتراضية');
+            } catch (error) {
+                console.error('❌ خطأ في إضافة الخدمات الافتراضية:', error);
+            }
+        }
+
+        // ============================================================
+        // 1️⃣5️⃣ مراقبة حالة تسجيل الدخول
+        // ============================================================
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('active');
+                loadServices();
+                loadLogs();
+            } else {
+                // لا نقوم بتسجيل الخروج تلقائياً للحفاظ على الجلسة
+            }
+        });
+
+        // إغلاق النوافذ المنبثقة بالضغط خارجها
+        document.querySelectorAll('.pricing-modal, .report-modal, .change-password-modal, .delete-modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        console.log('🚀 نظام إدارة الخدمات المتكاملة جاهز!');
+        console.log('📱 كود الحذف: 015593');
+        console.log('📞 رقم الإدارة: 01032720236');
+        console.log('🔑 تم استخدام Firebase Authentication + Firestore');
+    </script>
 
 </body>
 </html>
