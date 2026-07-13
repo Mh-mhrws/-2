@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منصة الخدمات المتكاملة</title>
+    <!-- Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* -------------------- الباكجراوند والتصميم العام -------------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f0f4ff 0%, #dce3f0 100%);
+            padding: 20px;
+        }
+
+        /* -------------------- الشريط العلوي (Navbar) -------------------- */
+        .navbar {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 20px;
+            padding: 15px 30px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            color: #2563eb;
+        }
+        .logo small {
+            font-size: 12px;
+            font-weight: 400;
+            color: #64748b;
+            margin-right: 8px;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-icons a {
+            text-decoration: none;
+            color: #1e293b;
+            font-size: 15px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            font-weight: 500;
+        }
+
+        .nav-icons a:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-icons a.whatsapp {
+            background: #25D366;
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+        }
+        .nav-icons a.whatsapp:hover {
+            background: #1da851;
+            box-shadow: 0 6px 24px rgba(37, 211, 102, 0.4);
+        }
+
+        .nav-icons a.login {
+            background: #1e293b;
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+        }
+        .nav-icons a.login:hover {
+            background: #0f172a;
+        }
+
+        /* -------------------- بطاقات الخدمات -------------------- */
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 45px 0 20px;
+            padding-right: 18px;
+            border-right: 5px solid #2563eb;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title i {
+            color: #2563eb;
+            font-size: 22px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 22px 20px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            transition: all 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed, #2563eb);
+            background-size: 200% 100%;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.96);
+            border-color: #2563eb30;
+        }
+
+        .service-card .card-image {
+            width: 100%;
+            height: 140px;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card .card-image .overlay-text {
+            position: absolute;
+            bottom: 10px;
+            right: 14px;
+            font-size: 11px;
+            background: rgba(0,0,0,0.3);
+            padding: 2px 12px;
+            border-radius: 30px;
+            color: #fff;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ألوان متنوعة للصور */
+        .img-blue { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .img-green { background: linear-gradient(135deg, #16a34a, #15803d); }
+        .img-purple { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+        .img-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .img-red { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .img-teal { background: linear-gradient(135deg, #0d9488, #0f766e); }
+        .img-pink { background: linear-gradient(135deg, #db2777, #be185d); }
+        .img-indigo { background: linear-gradient(135deg, #4f46e5, #4338ca); }
+        .img-cyan { background: linear-gradient(135deg, #0891b2, #0e7490); }
+        .img-rose { background: linear-gradient(135deg, #e11d48, #be123c); }
+        .img-amber { background: linear-gradient(135deg, #f59e0b, #b45309); }
+        .img-lime { background: linear-gradient(135deg, #65a30d, #4d7c0f); }
+
+        .service-card h3 {
+            font-size: 17px;
+            color: #0f172a;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 14px;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .service-card .btn-service {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .service-card .btn-service:hover {
+            background: #1d4ed8;
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .service-card .btn-whatsapp {
+            background: #25D366;
+        }
+        .service-card .btn-whatsapp:hover {
+            background: #1da851;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+        }
+
+        /* -------------------- تفريعات الجامعات -------------------- */
+        .university-sub {
+            display: none;
+            margin-top: 14px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 14px;
+            width: 100%;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .university-sub.active {
+            display: block;
+        }
+
+        .university-sub a {
+            display: block;
+            padding: 8px 14px;
+            margin: 4px 0;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+            border-right: 3px solid transparent;
+        }
+
+        .university-sub a:hover {
+            background: #fff;
+            border-right-color: #2563eb;
+            padding-right: 22px;
+        }
+
+        .university-sub strong {
+            display: block;
+            margin: 12px 0 6px;
+            color: #1e293b;
+            font-size: 14px;
+        }
+
+        .toggle-univ {
+            background: transparent;
+            border: 1px dashed #94a3b8;
+            color: #334155;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+
+        .toggle-univ:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.06);
+        }
+
+        .whatsapp-tag {
+            background: #25D366;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 40px;
+            margin-right: 6px;
+            display: inline-block;
+        }
+
+        /* -------------------- تنسيق عام -------------------- */
+        .container {
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px 0;
+            color: #94a3b8;
+            font-size: 14px;
+            border-top: 1px solid rgba(0,0,0,0.04);
+        }
+
+        /* -------------------- استجابة للجوال -------------------- */
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                gap: 12px;
+                padding: 15px;
+            }
+            .nav-icons {
+                justify-content: center;
+            }
+            .nav-icons a {
+                font-size: 13px;
+                padding: 6px 14px;
+            }
+            .section-title {
+                font-size: 19px;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .service-card .card-image {
+                height: 100px;
+                font-size: 40px;
+            }
+        }
+
+        /* سكرول جميل للجامعات */
+        .university-sub::-webkit-scrollbar {
+            width: 4px;
+        }
+        .university-sub::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.03);
+            border-radius: 10px;
+        }
+        .university-sub::-webkit-scrollbar-thumb {
+            background: #2563eb;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ======================== الشريط العلوي ======================== -->
+    <nav class="navbar">
+        <div class="logo">
+            <small>🇪🇬</small> خدماتي <span>•</span> مصر
+        </div>
+        <div class="nav-icons">
+            <a href="https://wa.me/2010xxxxxxxx" target="_blank" class="whatsapp">
+                <i class="fab fa-whatsapp"></i> واتساب
+            </a>
+            <a href="#" class="login">
+                <i class="fas fa-user"></i> تسجيل الدخول
+            </a>
+        </div>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- ======================== الخدمات ============================ -->
+    <!-- ============================================================ -->
+
+    <!-- 1️⃣ الكهرباء -->
+    <h2 class="section-title"><i class="fas fa-bolt"></i> الكهرباء</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-blue">
+                <i class="fas fa-bolt"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>منصة الكهرباء</h3>
+            <p>خدمات فواتير الكهرباء، طلبات التركيب، والاستعلامات</p>
+            <a href="https://eservices.eehc.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 2️⃣ تصاريح السفر -->
+    <h2 class="section-title"><i class="fas fa-passport"></i> تصاريح السفر</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-green">
+                <i class="fas fa-shield-alt"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>تصريح سفر - الحربية</h3>
+            <p>موقع التجنيد والخدمة العسكرية</p>
+            <a href="https://tagcand.mod.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+        <div class="service-card">
+            <div class="card-image img-purple">
+                <i class="fas fa-id-card"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>وزارة الداخلية</h3>
+            <p>تصاريح السفر، الجوازات، والأحوال المدنية</p>
+            <a href="https://moi.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 3️⃣ الجامعات -->
+    <h2 class="section-title"><i class="fas fa-university"></i> الجامعات الخاصة والأهلية</h2>
+    <div class="services-grid">
+        <div class="service-card" style="grid-column: 1 / -1;">
+            <div class="card-image img-indigo">
+                <i class="fas fa-graduation-cap"></i>
+                <span class="overlay-text">٢٧+ جامعة</span>
+            </div>
+            <h3>جميع الجامعات الخاصة والأهلية في مصر</h3>
+            <p>الجامعات المعترف بها رسمياً من وزارة التعليم العالي</p>
+            <button class="toggle-univ" onclick="toggleUniversities()">
+                <i class="fas fa-chevron-down"></i> عرض / إخفاء الجامعات
+            </button>
+            <div class="university-sub" id="univList">
+                <strong>🏛️ جامعات خاصة:</strong>
+                <a href="https://www.bue.edu.eg/" target="_blank">الجامعة البريطانية في مصر (BUE)</a>
+                <a href="https://www.guc.edu.eg/" target="_blank">الجامعة الألمانية بالقاهرة (GUC)</a>
+                <a href="https://www.miuegypt.edu.eg/" target="_blank">جامعة مصر الدولية (MIU)</a>
+                <a href="https://www.msa.edu.eg/" target="_blank">جامعة أكتوبر للعلوم الحديثة (MSA)</a>
+                <a href="https://www.fue.edu.eg/" target="_blank">جامعة المستقبل (FUE)</a>
+                <a href="https://nu.edu.eg/" target="_blank">جامعة النيل (NU)</a>
+                <a href="https://www.buc.edu.eg/" target="_blank">جامعة بدر بالقاهرة (BUC)</a>
+                <a href="https://www.ecu.edu.eg/" target="_blank">جامعة إيجبت للعلوم والتكنولوجيا</a>
+                <a href="https://www.hue.edu.eg/" target="_blank">جامعة هليوبوليس</a>
+                <a href="https://www.sue.edu.eg/" target="_blank">جامعة سيناء</a>
+                <a href="https://www.alamein.edu.eg/" target="_blank">جامعة العلمين الدولية</a>
+                <a href="https://www.giu.edu.eg/" target="_blank">الجامعة الألمانية الدولية (GIU)</a>
+
+                <strong>🏛️ جامعات أهلية:</strong>
+                <a href="https://www.aun.edu.eg/" target="_blank">جامعة أسيوط الأهلية</a>
+                <a href="https://www.zu.edu.eg/" target="_blank">جامعة الزقازيق الأهلية</a>
+                <a href="https://www.mans.edu.eg/" target="_blank">جامعة المنصورة الأهلية</a>
+                <a href="https://www.helwan.edu.eg/" target="_blank">جامعة حلوان الأهلية</a>
+                <a href="https://www.ksu.edu.eg/" target="_blank">جامعة كفر الشيخ الأهلية</a>
+                <a href="https://www.bsu.edu.eg/" target="_blank">جامعة بنها الأهلية</a>
+                <a href="https://www.svu.edu.eg/" target="_blank">جامعة جنوب الوادي الأهلية</a>
+                <a href="https://www.damanhour.edu.eg/" target="_blank">جامعة دمنهور الأهلية</a>
+                <a href="https://www.portsaid.edu.eg/" target="_blank">جامعة بورسعيد الأهلية</a>
+                <a href="https://www.luxor.edu.eg/" target="_blank">جامعة الأقصر الأهلية</a>
+                <a href="https://www.minia.edu.eg/" target="_blank">جامعة المنيا الأهلية</a>
+                <a href="https://www.sohag.edu.eg/" target="_blank">جامعة سوهاج الأهلية</a>
+                <a href="https://www.fayoum.edu.eg/" target="_blank">جامعة الفيوم الأهلية</a>
+                <a href="https://www.benisuef.edu.eg/" target="_blank">جامعة بني سويف الأهلية</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4️⃣ الوظائف -->
+    <h2 class="section-title"><i class="fas fa-briefcase"></i> الوظائف</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-teal">
+                <i class="fas fa-building"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>الوظائف الحكومية</h3>
+            <p>بوابة التوظيف الحكومي المصرية</p>
+            <a href="https://jobs.caoa.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 5️⃣ الخدمات المتكاملة -->
+    <h2 class="section-title"><i class="fas fa-cubes"></i> الخدمات المتكاملة</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-cyan">
+                <i class="fas fa-network-wired"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>منصة POD</h3>
+            <p>الخدمات المتكاملة للمواطنين</p>
+            <a href="https://pod.mohp.gov.eg/Inquery.aspx" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 6️⃣ التكافل وكرامة -->
+    <h2 class="section-title"><i class="fas fa-hand-holding-heart"></i> التكافل وكرامة</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-rose">
+                <i class="fas fa-heart"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>المجالس الطبية وتكافل وكرامة</h3>
+            <p>خدمات المجالس الطبية المتخصصة</p>
+            <a href="http://karama.smcegy.com/karama/?par=12&id=0" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 7️⃣ التأمين الصحي -->
+    <h2 class="section-title"><i class="fas fa-hospital"></i> التأمين الصحي</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-red">
+                <i class="fas fa-user-md"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>عيادات التأمين الصحي</h3>
+            <p>حجز مواعيد العيادات التابعة للتأمين الصحي</p>
+            <a href="https://reserv.hiocdis.org/hioclinicreservation.aspx" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 8️⃣ خدمات المعاقين -->
+    <h2 class="section-title"><i class="fas fa-wheelchair"></i> خدمات المعاقين</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-orange">
+                <i class="fas fa-car"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>حجز سيارات المعاقين</h3>
+            <p>خدمة حجز وتجديد سيارات ذوي الهمم</p>
+            <a href="https://car.smcegy.com/register.aspx" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 9️⃣ ضباط الاحتياط -->
+    <h2 class="section-title"><i class="fas fa-star"></i> ضباط الاحتياط</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-pink">
+                <i class="fas fa-medal"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>خدمات ضباط الاحتياط</h3>
+            <p>الاستعلامات والخدمات الإلكترونية لضباط الاحتياط</p>
+            <a href="https://officersaffairs.mod.gov.eg/ServicesApplication.aspx?serv=2" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 🔟 الكليات العسكرية -->
+    <h2 class="section-title"><i class="fas fa-shield-alt"></i> الكليات العسكرية</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-amber">
+                <i class="fas fa-trophy"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>التنسيق العسكري</h3>
+            <p>الكليات الحربية والعسكرية</p>
+            <a href="https://tansiq.mod.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- 1️⃣1️⃣ خدمات الطلاب -->
+    <h2 class="section-title"><i class="fas fa-user-graduate"></i> خدمات الطلاب</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-lime">
+                <i class="fas fa-envelope"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>الحساب الموحد للطالب</h3>
+            <p>خدمات Office 365 للطلاب</p>
+            <a href="https://office365.emis.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+        <div class="service-card">
+            <div class="card-image img-blue">
+                <i class="fas fa-school"></i>
+                <span class="overlay-text">رسمي</span>
+            </div>
+            <h3>الثانوية العامة</h3>
+            <p>خدمات التنسيق والنتائج</p>
+            <a href="https://tansiksec.emis.gov.eg/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- =============== خدمات التصميم (ورد، إكسيل، باوربوينت) ============== -->
+    <!-- ============================================================ -->
+    <h2 class="section-title"><i class="fas fa-pen-fancy"></i> خدمات التصميم والتحرير</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-blue">
+                <i class="fas fa-file-word"></i>
+                <span class="overlay-text">واتساب</span>
+            </div>
+            <h3>كتابة وتنسيق وورد</h3>
+            <p>كتابة تقارير، بحوث، تنسيق مستندات Word باحترافية</p>
+            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20تنسيق%20ورد" target="_blank" class="btn-service btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+            </a>
+        </div>
+
+        <div class="service-card">
+            <div class="card-image img-green">
+                <i class="fas fa-file-excel"></i>
+                <span class="overlay-text">واتساب</span>
+            </div>
+            <h3>جداول إكسيل احترافية</h3>
+            <p>عمل جداول بيانات، معادلات، تحليلات، ورسوم بيانية</p>
+            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20إكسيل" target="_blank" class="btn-service btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+            </a>
+        </div>
+
+        <div class="service-card">
+            <div class="card-image img-red">
+                <i class="fas fa-file-powerpoint"></i>
+                <span class="overlay-text">واتساب</span>
+            </div>
+            <h3>عروض باوربوينت</h3>
+            <p>تصميم عروض تقديمية احترافية وجذابة</p>
+            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20باوربوينت" target="_blank" class="btn-service btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+            </a>
+        </div>
+
+        <div class="service-card">
+            <div class="card-image img-purple">
+                <i class="fas fa-file-alt"></i>
+                <span class="overlay-text">واتساب</span>
+            </div>
+            <h3>السير الذاتية - Canva</h3>
+            <p>تصميم سير ذاتية كلاسيكية ومتوافقة مع ATS</p>
+            <a href="https://www.canva.com/" target="_blank" class="btn-service">انتقل للخدمة <i class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- =============== خدمات السفر (تساهيل، إنجاز، الطيران) ============== -->
+    <!-- ============================================================ -->
+    <h2 class="section-title"><i class="fas fa-plane"></i> خدمات السفر والسياحة</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="card-image img-teal">
+                <i class="fas fa-umbrella-beach"></i>
+                <span class="overlay-text">واتساب</span>
+            </div>
+            <h3>تساهيل للسفر</h3>
+            <p>حجز فنادق، تذاكر طيران، برامج سياحية بأسعار مخفضة</p>
+            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20تساهيل" target="_blank" class="btn-service btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+            </a>
+        </div>
+
+        <div class="service-card">
+            <div class="card-image img-orange">
+                <i class="fas fa-rocket"></i>
+                <span class="overlay-text">واتساب</span>
+            </div>
+            <h3>إنجاز للسفر</h3>
+            <p>إنهاء إجراءات السفر، تأشيرات، واستخراج تصاريح</p>
+            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20إنجاز" target="_blank" class="btn-service btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+            </a>
+        </div>
+
+        <div class="service-card">
+            <div class="card-image img-cyan">
+                <i class="fas fa-fighter-jet"></i>
+                <span class="overlay-text">واتساب</span>
+            </div>
+            <h3>حجز الطيران</h3>
+            <p>حجز تذاكر طيران داخلي ودولي بأفضل الأسعار</p>
+            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20حجز%20طيران" target="_blank" class="btn-service btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+            </a>
+        </div>
+
+        <div class="service-card">
+            <div class="card-image img-pink">
+                <i class="fas fa-hotel"></i>
+                <span class="overlay-text">واتساب</span>
+            </div>
+            <h3>حجز فنادق ومنتجعات</h3>
+            <p>أفضل عروض الفنادق والمنتجعات في مصر والعالم</p>
+            <a href="https://wa.me/2010xxxxxxxx?text=أريد%20حجز%20فندق" target="_blank" class="btn-service btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> تواصل عبر واتساب
+            </a>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ======================== الفوتر ============================ -->
+    <!-- ============================================================ -->
+    <div class="footer">
+        © 2026 منصة خدماتي • مصر — جميع الخدمات موجهة للمواقع الرسمية <br>
+        <span style="font-size:12px;color:#b0b8c5;">
+            <i class="fab fa-whatsapp" style="color:#25D366;"></i> للدعم الفني تواصل عبر واتساب
+        </span>
+    </div>
+
+</div>
+
+<!-- ======================== جافا سكريبت ======================== -->
+<script>
+    // دالة عرض/إخفاء قائمة الجامعات
+    function toggleUniversities() {
+        const list = document.getElementById('univList');
+        list.classList.toggle('active');
+        
+        const btn = document.querySelector('.toggle-univ');
+        if (list.classList.contains('active')) {
+            btn.innerHTML = '<i class="fas fa-chevron-up"></i> إخفاء الجامعات';
+        } else {
+            btn.innerHTML = '<i class="fas fa-chevron-down"></i> عرض / إخفاء الجامعات';
+        }
+    }
+
+    // توجيه رسائل واتساب مع نص مخصص
+    document.querySelectorAll('.btn-whatsapp').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            // الرسالة هتتفتح في واتساب بالтекست الموجود في الرابط
+            console.log('جاري التوجيه إلى واتساب...');
+        });
+    });
+</script>
+
+</body>
+</html>
