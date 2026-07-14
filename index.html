@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         /* ============================================================
-           جميع الأنماط
+           جميع الأنماط (نفس الكود السابق مع إضافات للجامعات)
            ============================================================ */
         * {
             margin: 0;
@@ -433,6 +433,84 @@
 
         .service-card .btn-service .fa-arrow-left {
             margin-right: 4px;
+        }
+
+        /* ============================================================
+           تفريعات الجامعات
+           ============================================================ */
+        .university-section {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .university-section .univ-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .university-section .univ-grid a {
+            display: block;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.3s;
+            border-right: 3px solid transparent;
+            text-align: right;
+        }
+
+        .university-section .univ-grid a:hover {
+            background: #fff;
+            border-right-color: #2563eb;
+            transform: translateX(-4px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .university-section .univ-category-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 12px 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .university-section .univ-category-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .toggle-univ-btn {
+            background: transparent;
+            border: 1px dashed #94a3b8;
+            color: #334155;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+
+        .toggle-univ-btn:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .university-section .univ-content {
+            display: none;
+        }
+
+        .university-section .univ-content.active {
+            display: block;
         }
 
         /* سجل الخدمات */
@@ -1004,6 +1082,15 @@
                 padding: 12px 18px;
                 font-size: 13px;
             }
+            .university-section .univ-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .university-section .univ-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -1062,9 +1149,62 @@
         </nav>
 
         <!-- ============================================================
-        الخدمات
+        الخدمات (مع جميع الروابط)
         ============================================================ -->
         <div id="servicesContainer"></div>
+
+        <!-- ============================================================
+        تفريعات الجامعات
+        ============================================================ -->
+        <div class="university-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                <h2 class="section-title" style="margin:0;border-right-color:#7c3aed;">
+                    <i class="fas fa-university" style="color:#7c3aed;"></i> الجامعات الخاصة والأهلية
+                </h2>
+                <button class="toggle-univ-btn" onclick="toggleUniversities()">
+                    <i class="fas fa-chevron-down" id="univToggleIcon"></i> عرض الجامعات
+                </button>
+            </div>
+            <div class="univ-content" id="univContent">
+                <!-- جامعات خاصة -->
+                <div class="univ-category-title"><i class="fas fa-star" style="color:#f59e0b;"></i> جامعات خاصة</div>
+                <div class="univ-grid">
+                    <a href="https://www.bue.edu.eg/" target="_blank">الجامعة البريطانية في مصر (BUE)</a>
+                    <a href="https://www.guc.edu.eg/" target="_blank">الجامعة الألمانية بالقاهرة (GUC)</a>
+                    <a href="https://www.miuegypt.edu.eg/" target="_blank">جامعة مصر الدولية (MIU)</a>
+                    <a href="https://www.msa.edu.eg/" target="_blank">جامعة أكتوبر للعلوم الحديثة (MSA)</a>
+                    <a href="https://www.fue.edu.eg/" target="_blank">جامعة المستقبل (FUE)</a>
+                    <a href="https://nu.edu.eg/" target="_blank">جامعة النيل (NU)</a>
+                    <a href="https://www.buc.edu.eg/" target="_blank">جامعة بدر بالقاهرة (BUC)</a>
+                    <a href="https://www.ecu.edu.eg/" target="_blank">جامعة إيجبت للعلوم والتكنولوجيا</a>
+                    <a href="https://www.hue.edu.eg/" target="_blank">جامعة هليوبوليس</a>
+                    <a href="https://www.sue.edu.eg/" target="_blank">جامعة سيناء</a>
+                    <a href="https://www.alamein.edu.eg/" target="_blank">جامعة العلمين الدولية</a>
+                    <a href="https://www.giu.edu.eg/" target="_blank">الجامعة الألمانية الدولية (GIU)</a>
+                    <a href="https://www.ksu.edu.eg/" target="_blank">جامعة الملك سلمان الدولية</a>
+                    <a href="https://www.just.edu.eg/" target="_blank">جامعة الجلالة</a>
+                </div>
+
+                <!-- جامعات أهلية -->
+                <div class="univ-category-title"><i class="fas fa-building" style="color:#2563eb;"></i> جامعات أهلية</div>
+                <div class="univ-grid">
+                    <a href="https://www.aun.edu.eg/" target="_blank">جامعة أسيوط الأهلية</a>
+                    <a href="https://www.zu.edu.eg/" target="_blank">جامعة الزقازيق الأهلية</a>
+                    <a href="https://www.mans.edu.eg/" target="_blank">جامعة المنصورة الأهلية</a>
+                    <a href="https://www.helwan.edu.eg/" target="_blank">جامعة حلوان الأهلية</a>
+                    <a href="https://www.bsu.edu.eg/" target="_blank">جامعة بنها الأهلية</a>
+                    <a href="https://www.svu.edu.eg/" target="_blank">جامعة جنوب الوادي الأهلية</a>
+                    <a href="https://www.damanhour.edu.eg/" target="_blank">جامعة دمنهور الأهلية</a>
+                    <a href="https://www.portsaid.edu.eg/" target="_blank">جامعة بورسعيد الأهلية</a>
+                    <a href="https://www.luxor.edu.eg/" target="_blank">جامعة الأقصر الأهلية</a>
+                    <a href="https://www.minia.edu.eg/" target="_blank">جامعة المنيا الأهلية</a>
+                    <a href="https://www.sohag.edu.eg/" target="_blank">جامعة سوهاج الأهلية</a>
+                    <a href="https://www.fayoum.edu.eg/" target="_blank">جامعة الفيوم الأهلية</a>
+                    <a href="https://www.benisuef.edu.eg/" target="_blank">جامعة بني سويف الأهلية</a>
+                    <a href="https://www.isma.edu.eg/" target="_blank">جامعة الإسماعيلية الأهلية</a>
+                </div>
+            </div>
+        </div>
 
         <!-- ============================================================
         سجل الخدمات
@@ -1242,10 +1382,10 @@
 
             if (user === VALID_USER && pass === VALID_PASS) {
                 error.classList.remove('show');
-                
+
                 // حفظ الجلسة
                 sessionStorage.setItem('isLoggedIn', 'true');
-                
+
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('mainContent').classList.add('active');
 
@@ -1272,9 +1412,7 @@
 
         function handleLogout() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                // حذف الجلسة
                 sessionStorage.removeItem('isLoggedIn');
-                
                 document.getElementById('mainContent').classList.remove('active');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 document.getElementById('loginPass').value = '';
@@ -1306,7 +1444,26 @@
         }
 
         // ============================================================
-        // 3️⃣ قائمة الخدمات
+        // 3️⃣ تفريعات الجامعات
+        // ============================================================
+
+        function toggleUniversities() {
+            const content = document.getElementById('univContent');
+            const icon = document.getElementById('univToggleIcon');
+
+            content.classList.toggle('active');
+
+            if (content.classList.contains('active')) {
+                icon.className = 'fas fa-chevron-up';
+                document.querySelector('.toggle-univ-btn').innerHTML = '<i class="fas fa-chevron-up" id="univToggleIcon"></i> إخفاء الجامعات';
+            } else {
+                icon.className = 'fas fa-chevron-down';
+                document.querySelector('.toggle-univ-btn').innerHTML = '<i class="fas fa-chevron-down" id="univToggleIcon"></i> عرض الجامعات';
+            }
+        }
+
+        // ============================================================
+        // 4️⃣ قائمة الخدمات (مع جميع الروابط)
         // ============================================================
 
         let servicesData = [];
@@ -1320,43 +1477,86 @@
                 servicesData = JSON.parse(savedServices);
             } else {
                 servicesData = [
+                    // الكهرباء
                     { id: 1, name: 'منصة الكهرباء', price: 50, category: 'electricity', type: 'official',
                         icon: 'fa-bolt', color: 'img-blue', description: 'خدمات فواتير الكهرباء والاستعلامات',
                         link: 'https://eservices.eehc.gov.eg/' },
+
+                    // تصاريح السفر
                     { id: 2, name: 'تصريح سفر - الحربية', price: 100, category: 'travel', type: 'official',
                         icon: 'fa-shield-alt', color: 'img-green', description: 'موقع التجنيد والخدمة العسكرية',
                         link: 'https://tagcand.mod.gov.eg/' },
                     { id: 3, name: 'وزارة الداخلية', price: 80, category: 'travel', type: 'official', icon: 'fa-id-card',
                         color: 'img-purple', description: 'تصاريح السفر والجوازات',
                         link: 'https://moi.gov.eg/' },
-                    { id: 4, name: 'الوظائف الحكومية', price: 60, category: 'jobs', type: 'official', icon: 'fa-building',
-                        color: 'img-teal', description: 'بوابة التوظيف الحكومي',
+
+                    // السير الذاتية
+                    { id: 4, name: 'السير الذاتية - Canva', price: 0, category: 'design', type: 'official',
+                        icon: 'fa-file-alt', color: 'img-indigo', description: 'تصميم سير ذاتية كلاسيكية ومتوافقة مع ATS',
+                        link: 'https://www.canva.com/' },
+
+                    // الوظائف
+                    { id: 5, name: 'الوظائف الحكومية', price: 60, category: 'jobs', type: 'official', icon: 'fa-building',
+                        color: 'img-teal', description: 'بوابة التوظيف الحكومي المصرية',
                         link: 'https://jobs.caoa.gov.eg/' },
-                    { id: 5, name: 'منصة POD', price: 40, category: 'official', type: 'official', icon: 'fa-network-wired',
-                        color: 'img-cyan', description: 'الخدمات المتكاملة للمواطنين',
+
+                    // الخدمات المتكاملة
+                    { id: 6, name: 'الخدمات المتكاملة POD', price: 40, category: 'official', type: 'official',
+                        icon: 'fa-network-wired', color: 'img-cyan', description: 'الخدمات المتكاملة للمواطنين',
                         link: 'https://pod.mohp.gov.eg/Inquery.aspx' },
-                    { id: 6, name: 'عيادات التأمين الصحي', price: 30, category: 'health', type: 'official',
+
+                    // التكافل وكرامة
+                    { id: 7, name: 'المجالس الطبية - تكافل وكرامة', price: 30, category: 'health', type: 'official',
+                        icon: 'fa-hand-holding-heart', color: 'img-rose', description: 'خدمات المجالس الطبية المتخصصة',
+                        link: 'http://karama.smcegy.com/karama/?par=12&id=0' },
+
+                    // التأمين الصحي
+                    { id: 8, name: 'عيادات التأمين الصحي', price: 30, category: 'health', type: 'official',
                         icon: 'fa-user-md', color: 'img-red', description: 'حجز مواعيد العيادات',
                         link: 'https://reserv.hiocdis.org/hioclinicreservation.aspx' },
-                    { id: 7, name: 'الحساب الموحد للطالب', price: 20, category: 'students', type: 'official',
+
+                    // خدمات المعاقين
+                    { id: 9, name: 'حجز سيارات المعاقين', price: 50, category: 'official', type: 'official',
+                        icon: 'fa-wheelchair', color: 'img-orange', description: 'خدمة حجز وتجديد سيارات ذوي الهمم',
+                        link: 'https://car.smcegy.com/register.aspx' },
+
+                    // ضباط الاحتياط
+                    { id: 10, name: 'خدمات ضباط الاحتياط', price: 70, category: 'military', type: 'official',
+                        icon: 'fa-star', color: 'img-pink', description: 'الاستعلامات والخدمات الإلكترونية لضباط الاحتياط',
+                        link: 'https://officersaffairs.mod.gov.eg/ServicesApplication.aspx?serv=2' },
+
+                    // الكليات العسكرية
+                    { id: 11, name: 'الكليات العسكرية', price: 60, category: 'military', type: 'official',
+                        icon: 'fa-shield-alt', color: 'img-amber', description: 'التنسيق للكليات الحربية والعسكرية',
+                        link: 'https://tansiq.mod.gov.eg/' },
+
+                    // خدمات الطلاب
+                    { id: 12, name: 'الحساب الموحد للطالب', price: 20, category: 'students', type: 'official',
                         icon: 'fa-envelope', color: 'img-lime', description: 'خدمات Office 365 للطلاب',
                         link: 'https://office365.emis.gov.eg/' },
-                    { id: 8, name: 'خدمة وورد', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-word',
+                    { id: 13, name: 'خدمات الثانوية العامة', price: 25, category: 'students', type: 'official',
+                        icon: 'fa-school', color: 'img-blue', description: 'خدمات التنسيق والنتائج',
+                        link: 'https://tansiksec.emis.gov.eg/' },
+
+                    // خدمات التصميم (واتساب)
+                    { id: 14, name: 'خدمة وورد', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-word',
                         color: 'img-blue', description: 'كتابة وتنسيق مستندات Word',
                         link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20ورد' },
-                    { id: 9, name: 'خدمة إكسيل', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-excel',
+                    { id: 15, name: 'خدمة إكسيل', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-excel',
                         color: 'img-green', description: 'جداول بيانات وتحليلات',
                         link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20إكسيل' },
-                    { id: 10, name: 'خدمة باوربوينت', price: 200, category: 'design', type: 'whatsapp',
+                    { id: 16, name: 'خدمة باوربوينت', price: 200, category: 'design', type: 'whatsapp',
                         icon: 'fa-file-powerpoint', color: 'img-red', description: 'عروض تقديمية احترافية',
                         link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20باوربوينت' },
-                    { id: 11, name: 'تساهيل للسفر', price: 250, category: 'travel', type: 'whatsapp',
+
+                    // خدمات السفر (واتساب)
+                    { id: 17, name: 'تساهيل للسفر', price: 250, category: 'travel', type: 'whatsapp',
                         icon: 'fa-umbrella-beach', color: 'img-teal', description: 'حجز فنادق وبرامج سياحية',
                         link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20تساهيل' },
-                    { id: 12, name: 'إنجاز للسفر', price: 300, category: 'travel', type: 'whatsapp', icon: 'fa-rocket',
+                    { id: 18, name: 'إنجاز للسفر', price: 300, category: 'travel', type: 'whatsapp', icon: 'fa-rocket',
                         color: 'img-orange', description: 'إنهاء إجراءات السفر',
                         link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20إنجاز' },
-                    { id: 13, name: 'حجز الطيران', price: 200, category: 'travel', type: 'whatsapp',
+                    { id: 19, name: 'حجز الطيران', price: 200, category: 'travel', type: 'whatsapp',
                         icon: 'fa-fighter-jet', color: 'img-cyan', description: 'حجز تذاكر طيران',
                         link: 'https://wa.me/2010xxxxxxxx?text=أريد%20حجز%20طيران' },
                 ];
@@ -1375,9 +1575,10 @@
                 if (service.category !== currentCategory) {
                     currentCategory = service.category;
                     const categoryName = getCategoryName(currentCategory);
+                    const categoryIcon = getCategoryIcon(currentCategory);
                     html += `
                         <h2 class="section-title">
-                            <i class="fas ${getCategoryIcon(currentCategory)}"></i> 
+                            <i class="fas ${categoryIcon}"></i> 
                             ${categoryName}
                         </h2>
                         <div class="services-grid">
@@ -1386,7 +1587,6 @@
 
                 const priceDisplay = service.price ? `${service.price} ج.م` : 'مجاني';
                 const btnClass = service.type === 'whatsapp' ? 'btn-whatsapp' : '';
-                const linkTarget = service.link || '#';
                 const btnText = service.type === 'whatsapp' ?
                     '<i class="fab fa-whatsapp"></i> بدء الخدمة' :
                     'بدء الخدمة <i class="fas fa-arrow-left"></i>';
@@ -1400,7 +1600,7 @@
                         <h3>${service.name}</h3>
                         <div class="price-tag" id="priceTag_${service.id}">💰 ${priceDisplay}</div>
                         <p>${service.description || ''}</p>
-                        <button class="btn-service ${btnClass}" onclick="startService(${service.id}, '${service.name}', ${service.price || 0}, '${linkTarget}')">
+                        <button class="btn-service ${btnClass}" onclick="startService(${service.id}, '${service.name}', ${service.price || 0}, '${service.link}')">
                             ${btnText}
                         </button>
                     </div>
@@ -1416,7 +1616,7 @@
         }
 
         // ============================================================
-        // 4️⃣ بدء الخدمة (حفظ تلقائي + انتقال للموقع)
+        // 5️⃣ بدء الخدمة (حفظ تلقائي + انتقال للموقع)
         // ============================================================
 
         function startService(serviceId, serviceName, price, link) {
@@ -1448,7 +1648,7 @@
         }
 
         // ============================================================
-        // 5️⃣ تحميل السجل
+        // 6️⃣ تحميل السجل
         // ============================================================
 
         function loadLogs() {
@@ -1499,7 +1699,7 @@
         }
 
         // ============================================================
-        // 6️⃣ التسعير (يتطلب كود مخفي 015593)
+        // 7️⃣ التسعير (يتطلب كود مخفي 015593)
         // ============================================================
 
         function openPricing() {
@@ -1540,7 +1740,6 @@
             const input = document.getElementById(`priceInput_${serviceId}`);
             if (!input) return;
 
-            // طلب كود التأكيد
             const code = prompt('🔒 أدخل كود التأكيد لتغيير السعر:');
             if (code !== DELETE_CODE) {
                 showToast('❌ كود غير صحيح - لم يتم تغيير السعر', 'error');
@@ -1558,7 +1757,6 @@
                 service.price = price;
                 localStorage.setItem('servicesData', JSON.stringify(servicesData));
 
-                // تحديث السعر في البطاقة مباشرة
                 const priceTag = document.getElementById(`priceTag_${serviceId}`);
                 if (priceTag) {
                     priceTag.textContent = `💰 ${price} ج.م`;
@@ -1623,7 +1821,7 @@
         }
 
         // ============================================================
-        // 7️⃣ التقرير اليومي
+        // 8️⃣ التقرير اليومي
         // ============================================================
 
         function openDailyReport() {
@@ -1668,7 +1866,7 @@
         }
 
         // ============================================================
-        // 8️⃣ تصدير السجل
+        // 9️⃣ تصدير السجل
         // ============================================================
 
         function exportLogs() {
@@ -1697,7 +1895,7 @@
         }
 
         // ============================================================
-        // 9️⃣ حذف السجل
+        // 🔟 حذف السجل
         // ============================================================
 
         function openDeleteModal() {
@@ -1728,7 +1926,7 @@
         }
 
         // ============================================================
-        // 🔟 الآلة الحاسبة
+        // 1️⃣1️⃣ الآلة الحاسبة
         // ============================================================
 
         let calcValue = '0';
@@ -1771,7 +1969,7 @@
         }
 
         // ============================================================
-        // 1️⃣1️⃣ دوال مساعدة
+        // 1️⃣2️⃣ دوال مساعدة
         // ============================================================
 
         function getCategoryName(category) {
@@ -1780,7 +1978,6 @@
                 'whatsapp': 'خدمات عبر واتساب',
                 'electricity': 'الكهرباء',
                 'travel': 'تصاريح السفر',
-                'university': 'الجامعات',
                 'jobs': 'الوظائف',
                 'health': 'الصحة والتأمين',
                 'students': 'خدمات الطلاب',
@@ -1796,7 +1993,6 @@
                 'whatsapp': 'fa-whatsapp',
                 'electricity': 'fa-bolt',
                 'travel': 'fa-passport',
-                'university': 'fa-university',
                 'jobs': 'fa-briefcase',
                 'health': 'fa-hospital',
                 'students': 'fa-user-graduate',
@@ -1807,7 +2003,7 @@
         }
 
         // ============================================================
-        // 1️⃣2️⃣ إغلاق النوافذ المنبثقة بالضغط خارجها
+        // 1️⃣3️⃣ إغلاق النوافذ المنبثقة بالضغط خارجها
         // ============================================================
 
         document.querySelectorAll('.pricing-modal, .report-modal, .delete-modal').forEach(modal => {
@@ -1819,16 +2015,14 @@
         });
 
         // ============================================================
-        // 1️⃣3️⃣ تحميل البيانات والتحقق من الجلسة
+        // 1️⃣4️⃣ تحميل البيانات والتحقق من الجلسة
         // ============================================================
 
-        // تحميل السجل من localStorage
         const savedLogs = localStorage.getItem('logsData');
         if (savedLogs) {
             logsData = JSON.parse(savedLogs);
         }
 
-        // التحقق من الجلسة عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
             checkSession();
         });
@@ -1838,6 +2032,9 @@
         console.log('🔑 الباسورد: Mm01032720236@@');
         console.log('🔒 كود الحذف: 015593 (مخفي)');
         console.log('💾 الجلسة محفوظة حتى غلق المتصفح');
+        console.log('📚 عدد الخدمات: ' + servicesData.length);
+        console.log('🏛️ جامعات خاصة: 14 جامعة');
+        console.log('🏛️ جامعات أهلية: 14 جامعة');
     </script>
 
 </body>
