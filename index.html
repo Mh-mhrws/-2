@@ -918,7 +918,7 @@
             display: none !important;
         }
 
-        /* تأثيرات إضافية */
+        /* Toast Notification */
         .toast-message {
             position: fixed;
             bottom: 30px;
@@ -1214,12 +1214,26 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // 1️⃣ نظام تسجيل الدخول
+        // 1️⃣ نظام تسجيل الدخول (مع جلسة ثابتة)
         // ============================================================
 
         const VALID_USER = '01032720236';
         const VALID_PASS = 'Mm01032720236@@';
         const DELETE_CODE = '015593';
+
+        // التحقق من الجلسة عند تحميل الصفحة
+        function checkSession() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            if (isLoggedIn === 'true') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('active');
+                loadServices();
+                loadLogs();
+                loadPricingList();
+                return true;
+            }
+            return false;
+        }
 
         function handleLogin() {
             const user = document.getElementById('loginUser').value.trim();
@@ -1228,6 +1242,10 @@
 
             if (user === VALID_USER && pass === VALID_PASS) {
                 error.classList.remove('show');
+                
+                // حفظ الجلسة
+                sessionStorage.setItem('isLoggedIn', 'true');
+                
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('mainContent').classList.add('active');
 
@@ -1242,6 +1260,7 @@
             }
         }
 
+        // السماح بالدخول بضغط Enter
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const loginScreen = document.getElementById('loginScreen');
@@ -1253,6 +1272,9 @@
 
         function handleLogout() {
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                // حذف الجلسة
+                sessionStorage.removeItem('isLoggedIn');
+                
                 document.getElementById('mainContent').classList.remove('active');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 document.getElementById('loginPass').value = '';
@@ -1378,9 +1400,9 @@
                         <h3>${service.name}</h3>
                         <div class="price-tag" id="priceTag_${service.id}">💰 ${priceDisplay}</div>
                         <p>${service.description || ''}</p>
-                        <a href="${linkTarget}" target="_blank" class="btn-service ${btnClass}" onclick="startService(${service.id}, '${service.name}', ${service.price || 0})">
+                        <button class="btn-service ${btnClass}" onclick="startService(${service.id}, '${service.name}', ${service.price || 0}, '${linkTarget}')">
                             ${btnText}
-                        </a>
+                        </button>
                     </div>
                 `;
 
@@ -1397,7 +1419,7 @@
         // 4️⃣ بدء الخدمة (حفظ تلقائي + انتقال للموقع)
         // ============================================================
 
-        function startService(serviceId, serviceName, price) {
+        function startService(serviceId, serviceName, price, link) {
             // حفظ الخدمة في السجل تلقائياً
             const now = new Date();
             const dateStr = now.toLocaleDateString('ar-EG');
@@ -1415,9 +1437,13 @@
             localStorage.setItem('logsData', JSON.stringify(logsData));
             loadLogs();
 
-            showToast(`✅ تم بدء خدمة "${serviceName}"`, 'success');
+            showToast(`✅ جاري التوجيه إلى "${serviceName}"`, 'success');
 
-            // الرابط هيفتح تلقائياً لأن العنصر <a> عنده target="_blank"
+            // الانتقال للموقع بعد نصف ثانية
+            setTimeout(() => {
+                window.open(link, '_blank');
+            }, 300);
+
             return true;
         }
 
@@ -1473,7 +1499,7 @@
         }
 
         // ============================================================
-        // 6️⃣ التسعير (تحديث الأسعار)
+        // 6️⃣ التسعير (يتطلب كود مخفي 015593)
         // ============================================================
 
         function openPricing() {
@@ -1514,6 +1540,13 @@
             const input = document.getElementById(`priceInput_${serviceId}`);
             if (!input) return;
 
+            // طلب كود التأكيد
+            const code = prompt('🔒 أدخل كود التأكيد لتغيير السعر:');
+            if (code !== DELETE_CODE) {
+                showToast('❌ كود غير صحيح - لم يتم تغيير السعر', 'error');
+                return;
+            }
+
             const price = parseFloat(input.value);
             if (isNaN(price) || price < 0) {
                 showToast('⚠️ من فضلك أدخل سعر صحيح', 'error');
@@ -1542,7 +1575,7 @@
 
             const code = prompt('🔒 أدخل كود التأكيد لحذف الخدمة:');
             if (code !== DELETE_CODE) {
-                showToast('❌ كود غير صحيح', 'error');
+                showToast('❌ كود غير صحيح - لم يتم الحذف', 'error');
                 return;
             }
 
@@ -1786,18 +1819,25 @@
         });
 
         // ============================================================
-        // 1️⃣3️⃣ تحميل البيانات تلقائياً
+        // 1️⃣3️⃣ تحميل البيانات والتحقق من الجلسة
         // ============================================================
 
+        // تحميل السجل من localStorage
         const savedLogs = localStorage.getItem('logsData');
         if (savedLogs) {
             logsData = JSON.parse(savedLogs);
         }
 
+        // التحقق من الجلسة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSession();
+        });
+
         console.log('🚀 نظام إدارة الخدمات المتكاملة جاهز!');
         console.log('📱 المستخدم: 01032720236');
         console.log('🔑 الباسورد: Mm01032720236@@');
         console.log('🔒 كود الحذف: 015593 (مخفي)');
+        console.log('💾 الجلسة محفوظة حتى غلق المتصفح');
     </script>
 
 </body>
