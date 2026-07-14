@@ -3,17 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>منصة خدماتي • مصر - نظام متكامل</title>
+    <title>منصة خدماتي • مصر</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js">
-    </script>
-
     <style>
         /* ============================================================
            جميع الأنماط
@@ -51,8 +42,8 @@
         .login-box {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 30px;
-            padding: 40px 35px;
-            max-width: 450px;
+            padding: 45px 40px 40px;
+            max-width: 400px;
             width: 100%;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
             text-align: center;
@@ -71,31 +62,31 @@
         }
 
         .login-box .logo-icon {
-            font-size: 48px;
+            font-size: 52px;
             color: #2563eb;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .login-box h2 {
             font-size: 24px;
             color: #0f172a;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .login-box p {
             color: #64748b;
             font-size: 14px;
-            margin-bottom: 18px;
+            margin-bottom: 24px;
         }
 
         .login-box .input-group {
             position: relative;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .login-box .input-group input {
             width: 100%;
-            padding: 14px 18px;
+            padding: 15px 18px;
             border: 2px solid #e2e8f0;
             border-radius: 14px;
             font-size: 16px;
@@ -111,13 +102,9 @@
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
 
-        .login-box .input-group input:disabled {
-            opacity: 0.6;
-        }
-
         .login-box .login-btn {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             background: #2563eb;
             color: #fff;
             border: none;
@@ -134,24 +121,10 @@
             transform: scale(1.02);
         }
 
-        .login-box .login-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .login-box .login-btn.whatsapp-btn {
-            background: #25D366;
-        }
-
-        .login-box .login-btn.whatsapp-btn:hover {
-            background: #1da851;
-        }
-
         .login-box .error-msg {
             color: #dc2626;
             font-size: 13px;
-            margin-top: 10px;
+            margin-top: 12px;
             display: none;
         }
 
@@ -159,103 +132,9 @@
             display: block;
         }
 
-        .login-box .success-msg {
-            color: #16a34a;
-            font-size: 13px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .login-box .success-msg.show {
-            display: block;
-        }
-
-        .login-box .info-text {
-            color: #64748b;
-            font-size: 12px;
-            margin-top: 8px;
-        }
-
-        .login-box .info-text.timer-text {
-            color: #f59e0b;
-            font-weight: 600;
-        }
-
-        .login-box .info-text.timer-text.expired {
-            color: #dc2626;
-        }
-
-        .login-box .code-display {
-            background: #f1f5f9;
-            border-radius: 14px;
-            padding: 16px;
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: 8px;
-            color: #0f172a;
-            margin: 12px 0;
-            direction: ltr;
-            font-family: 'Courier New', monospace;
-            border: 2px dashed #2563eb;
-            display: none;
-        }
-
-        .login-box .code-display.show {
-            display: block;
-        }
-
-        .login-box .step-code-container {
-            display: none;
-        }
-
-        .login-box .step-code-container.active {
-            display: block;
-        }
-
-        .login-box .step-phone-container {
-            display: block;
-        }
-
-        .login-box .step-phone-container.hidden {
-            display: none;
-        }
-
-        .login-box .success-send-box {
-            background: #f0fdf4;
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 12px;
-            border: 1px solid #86efac;
-            display: none;
-        }
-
-        .login-box .success-send-box.active {
-            display: block;
-        }
-
-        .login-box .success-send-box p {
-            color: #16a34a;
-            font-size: 13px;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .login-box .resend-btn {
-            background: transparent;
-            border: none;
-            color: #2563eb;
-            cursor: pointer;
-            font-size: 13px;
-            margin-top: 8px;
-            transition: 0.3s;
-        }
-
-        .login-box .resend-btn:hover {
-            color: #1d4ed8;
-            text-decoration: underline;
-        }
-
-        /* المحتوى الرئيسي */
+        /* ============================================================
+           المحتوى الرئيسي
+           ============================================================ */
         .main-content {
             display: none;
             max-width: 1400px;
@@ -682,7 +561,6 @@
         /* النوافذ المنبثقة */
         .pricing-modal,
         .report-modal,
-        .change-password-modal,
         .delete-modal {
             display: none;
             position: fixed;
@@ -697,14 +575,12 @@
 
         .pricing-modal.active,
         .report-modal.active,
-        .change-password-modal.active,
         .delete-modal.active {
             display: flex;
         }
 
         .pricing-box,
         .report-box,
-        .change-password-box,
         .del-box {
             background: #fff;
             border-radius: 24px;
@@ -883,81 +759,6 @@
         .report-box .report-details td {
             padding: 5px 10px;
             border-bottom: 1px solid #e2e8f0;
-        }
-
-        .change-password-box h3 {
-            font-size: 20px;
-            color: #0f172a;
-            margin-bottom: 6px;
-        }
-
-        .change-password-box p {
-            color: #64748b;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-
-        .change-password-box input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 16px;
-            margin-bottom: 10px;
-            text-align: center;
-            direction: ltr;
-        }
-
-        .change-password-box input:focus {
-            border-color: #2563eb;
-            outline: none;
-        }
-
-        .change-password-box .cp-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .change-password-box .cp-actions button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .change-password-box .cp-actions .cp-confirm {
-            background: #2563eb;
-            color: #fff;
-        }
-
-        .change-password-box .cp-actions .cp-confirm:hover {
-            background: #1d4ed8;
-        }
-
-        .change-password-box .cp-actions .cp-cancel {
-            background: #e2e8f0;
-            color: #0f172a;
-        }
-
-        .change-password-box .cp-actions .cp-cancel:hover {
-            background: #cbd5e1;
-        }
-
-        .change-password-box .cp-error {
-            color: #dc2626;
-            font-size: 13px;
-            margin-top: 8px;
-            display: none;
-        }
-
-        .change-password-box .cp-success {
-            color: #16a34a;
-            font-size: 13px;
-            margin-top: 8px;
-            display: none;
         }
 
         .del-box {
@@ -1158,66 +959,33 @@
             .pricing-item .service-price-input {
                 width: 100%;
             }
-            .login-box .code-display {
-                font-size: 24px;
-                letter-spacing: 4px;
-            }
         }
     </style>
 </head>
 <body>
 
     <!-- ============================================================
-    شاشة تسجيل الدخول (عن طريق واتساب)
+    شاشة تسجيل الدخول
     ============================================================ -->
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
             <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
             <h2>تسجيل الدخول</h2>
-            <p>أدخل رقم هاتفك لتلقي كود التحقق عبر <strong>واتساب</strong></p>
+            <p>أدخل بياناتك للوصول إلى لوحة التحكم</p>
 
-            <!-- مرحلة 1: إدخال رقم الهاتف -->
-            <div class="step-phone-container" id="stepPhone">
-                <div class="input-group">
-                    <input type="tel" id="phoneInput" placeholder="رقم الهاتف (مثال: 01032720236)" value="01032720236" />
-                </div>
-                <button class="login-btn whatsapp-btn" id="sendCodeBtn" onclick="sendCodeViaWhatsApp()">
-                    <i class="fab fa-whatsapp"></i> إرسال الكود عبر واتساب
-                </button>
-                <div class="info-text">📱 سيتم إرسال كود مكون من 6 أرقام</div>
+            <div class="input-group">
+                <input type="text" id="loginUser" placeholder="رقم الموبايل" value="01032720236" />
             </div>
 
-            <!-- مرحلة 2: إدخال الكود (تظهر بعد إرسال الكود) -->
-            <div class="step-code-container" id="stepCode">
-                <div class="success-send-box active" id="successSendBox">
-                    <p><i class="fas fa-check-circle"></i> تم إرسال الكود إلى واتساب</p>
-                </div>
-
-                <!-- عرض الكود للمستخدم -->
-                <div class="code-display" id="codeDisplay"></div>
-
-                <div class="input-group">
-                    <input type="text" id="codeInput" placeholder="أدخل الكود المكون من 6 أرقام" maxlength="6" autofocus />
-                </div>
-
-                <button class="login-btn" id="verifyBtn" onclick="verifyCode()">
-                    <i class="fas fa-check"></i> تأكيد الدخول
-                </button>
-
-                <!-- مؤقت العد التنازلي -->
-                <div class="info-text">
-                    <span id="timerText">⏳ صلاحية الكود: 05:00</span>
-                </div>
-
-                <!-- زر إعادة الإرسال -->
-                <button class="resend-btn" onclick="resendCode()">
-                    <i class="fas fa-redo"></i> إعادة إرسال الكود
-                </button>
+            <div class="input-group">
+                <input type="password" id="loginPass" placeholder="كلمة المرور" />
             </div>
 
-            <!-- رسائل الخطأ والنجاح -->
-            <div class="error-msg" id="loginError">⚠️ حدث خطأ، حاول مرة أخرى</div>
-            <div class="success-msg" id="loginSuccess">✅ تم التحقق بنجاح!</div>
+            <button class="login-btn" onclick="handleLogin()">
+                <i class="fas fa-sign-in-alt"></i> دخول
+            </button>
+
+            <div class="error-msg" id="loginError">⚠️ رقم الموبايل أو كلمة المرور غير صحيحة</div>
         </div>
     </div>
 
@@ -1242,9 +1010,6 @@
                 <a href="https://wa.me/2010xxxxxxxx" target="_blank" class="whatsapp">
                     <i class="fab fa-whatsapp"></i> واتساب
                 </a>
-                <button onclick="openChangePassword()">
-                    <i class="fas fa-key"></i> تغيير باسورد
-                </button>
                 <button onclick="handleLogout()" class="logout">
                     <i class="fas fa-sign-out-alt"></i> خروج
                 </button>
@@ -1252,13 +1017,10 @@
         </nav>
 
         <!-- ============================================================
-        الخدمات (سيتم تحميلها ديناميكياً)
+        الخدمات (مباشرة - بدون تحميل)
         ============================================================ -->
         <div id="servicesContainer">
-            <div class="text-center" style="padding:40px;color:#94a3b8;">
-                <i class="fas fa-spinner fa-spin fa-2x"></i>
-                <p style="margin-top:10px;">جاري تحميل الخدمات...</p>
-            </div>
+            <!-- سيتم عرض الخدمات مباشرة من خلال JavaScript -->
         </div>
 
         <!-- ============================================================
@@ -1330,9 +1092,7 @@
                 </select>
                 <button onclick="addNewService()"><i class="fas fa-plus"></i> إضافة</button>
             </div>
-            <div style="margin-top:12px;font-size:12px;color:#94a3b8;">
-                🔒 تغيير الأسعار يتطلب كود الحذف: <strong>015593</strong>
-            </div>
+            <!-- تم إخفاء كود التسعير -->
         </div>
     </div>
 
@@ -1353,25 +1113,7 @@
     </div>
 
     <!-- ============================================================
-    نافذة تغيير الباسورد
-    ============================================================ -->
-    <div class="change-password-modal" id="changePasswordModal">
-        <div class="change-password-box">
-            <h3><i class="fas fa-key"></i> تغيير كلمة المرور</h3>
-            <p>أدخل كلمة المرور الجديدة</p>
-            <input type="password" id="newPasswordInput" placeholder="كلمة المرور الجديدة" />
-            <input type="password" id="confirmPasswordInput" placeholder="تأكيد كلمة المرور" />
-            <div class="cp-actions">
-                <button class="cp-cancel" onclick="closeChangePassword()">إلغاء</button>
-                <button class="cp-confirm" onclick="changePassword()">تغيير</button>
-            </div>
-            <div class="cp-error" id="cpError">⚠️ كلمة المرور غير متطابقة</div>
-            <div class="cp-success" id="cpSuccess">✅ تم التغيير بنجاح</div>
-        </div>
-    </div>
-
-    <!-- ============================================================
-    نافذة حذف السجل
+    نافذة حذف السجل (الكود مخفي)
     ============================================================ -->
     <div class="delete-modal" id="deleteModal">
         <div class="del-box">
@@ -1423,212 +1165,31 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // إعدادات Firebase (استبدل هذه بالقيم الخاصة بك)
-        // ============================================================
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // تهيئة Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // ============================================================
-        // 1️⃣ نظام تسجيل الدخول عبر واتساب
+        // 1️⃣ نظام تسجيل الدخول (ثابت - بدون Firebase)
         // ============================================================
 
-        let generatedCode = '';
-        let codeExpiry = null;
-        let countdownInterval = null;
+        const VALID_USER = '01032720236';
+        const VALID_PASS = 'Mm01032720236@@';
+        const DELETE_CODE = '015593';
 
-        // الأرقام المسموح بها
-        const ALLOWED_PHONES = ['01032720236', '01559313440'];
-
-        // دالة توليد كود عشوائي 6 أرقام
-        function generateRandomCode() {
-            return String(Math.floor(100000 + Math.random() * 900000));
-        }
-
-        // دالة إرسال الكود عبر واتساب
-        function sendCodeViaWhatsApp() {
-            const phone = document.getElementById('phoneInput').value.trim();
+        function handleLogin() {
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
             const error = document.getElementById('loginError');
-            const success = document.getElementById('loginSuccess');
-            const btn = document.getElementById('sendCodeBtn');
 
-            // تنظيف رقم الهاتف
-            const cleanPhone = phone.replace(/[^0-9]/g, '');
-
-            // التحقق من الرقم
-            if (cleanPhone.length < 10) {
-                error.textContent = '⚠️ من فضلك أدخل رقم هاتف صحيح (مثال: 01032720236)';
-                error.classList.add('show');
-                success.classList.remove('show');
-                return;
-            }
-
-            // التحقق من أن الرقم مسموح به
-            if (!ALLOWED_PHONES.includes(cleanPhone)) {
-                error.textContent = '⚠️ هذا الرقم غير مسموح به. الرجاء التواصل مع الإدارة';
-                error.classList.add('show');
-                success.classList.remove('show');
-                return;
-            }
-
-            error.classList.remove('show');
-            success.classList.remove('show');
-
-            // توليد كود جديد
-            generatedCode = generateRandomCode();
-            codeExpiry = Date.now() + (5 * 60 * 1000); // 5 دقائق صلاحية
-
-            // عرض الكود في الواجهة
-            document.getElementById('codeDisplay').textContent = generatedCode;
-            document.getElementById('codeDisplay').classList.add('show');
-
-            // إخفاء مرحلة الهاتف وإظهار مرحلة الكود
-            document.getElementById('stepPhone').style.display = 'none';
-            document.getElementById('stepCode').style.display = 'block';
-            document.getElementById('codeInput').value = '';
-            document.getElementById('codeInput').focus();
-
-            // بناء رابط واتساب مع الكود
-            const whatsappNumber = '2010xxxxxxxx'; // رقم واتساب الإدارة
-            const message =
-                `🔐 كود التحقق الخاص بك هو: *${generatedCode}*%0A%0A⏳ صلاحية الكود: 5 دقائق%0A📱 منصة خدماتي • مصر`;
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
-
-            // فتح واتساب في نافذة جديدة
-            window.open(whatsappUrl, '_blank');
-
-            // تحديث واجهة المستخدم
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-
-            // بدء المؤقت
-            startTimer();
-
-            // إعادة تمكين الزر بعد 30 ثانية
-            setTimeout(() => {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fab fa-whatsapp"></i> إعادة إرسال الكود';
-            }, 30000);
-
-            console.log('📱 الكود المرسل:', generatedCode);
-            console.log('⏳ تنتهي صلاحيته في:', new Date(codeExpiry).toLocaleTimeString());
-        }
-
-        // دالة إعادة إرسال الكود
-        function resendCode() {
-            // إعادة تعيين المراحل
-            document.getElementById('stepCode').style.display = 'none';
-            document.getElementById('stepPhone').style.display = 'block';
-            document.getElementById('codeDisplay').classList.remove('show');
-            document.getElementById('loginError').classList.remove('show');
-            document.getElementById('loginSuccess').classList.remove('show');
-
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
-
-            // إعادة الإرسال
-            sendCodeViaWhatsApp();
-        }
-
-        // دالة بدء المؤقت
-        function startTimer() {
-            const timerEl = document.getElementById('timerText');
-
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
-
-            countdownInterval = setInterval(() => {
-                const remaining = Math.floor((codeExpiry - Date.now()) / 1000);
-
-                if (remaining <= 0) {
-                    clearInterval(countdownInterval);
-                    timerEl.textContent = '⏰ انتهت صلاحية الكود، اضغط "إعادة إرسال الكود"';
-                    timerEl.className = 'info-text timer-text expired';
-                    document.getElementById('codeInput').disabled = true;
-                    document.getElementById('verifyBtn').disabled = true;
-                    return;
-                }
-
-                const minutes = Math.floor(remaining / 60);
-                const seconds = remaining % 60;
-                timerEl.textContent = `⏳ صلاحية الكود: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                timerEl.className = 'info-text timer-text';
-            }, 1000);
-        }
-
-        // دالة التحقق من الكود
-        function verifyCode() {
-            const inputCode = document.getElementById('codeInput').value.trim();
-            const error = document.getElementById('loginError');
-            const success = document.getElementById('loginSuccess');
-            const verifyBtn = document.getElementById('verifyBtn');
-
-            // التحقق من أن الكود مكون من 6 أرقام
-            if (inputCode.length !== 6 || !/^\d+$/.test(inputCode)) {
-                error.textContent = '⚠️ من فضلك أدخل الكود المكون من 6 أرقام';
-                error.classList.add('show');
-                success.classList.remove('show');
-                document.getElementById('codeInput').value = '';
-                document.getElementById('codeInput').focus();
-                return;
-            }
-
-            // التحقق من صلاحية الكود
-            if (Date.now() > codeExpiry) {
-                error.textContent = '⚠️ انتهت صلاحية الكود، اضغط "إعادة إرسال الكود"';
-                error.classList.add('show');
-                success.classList.remove('show');
-                document.getElementById('codeInput').value = '';
-                document.getElementById('codeInput').focus();
-                return;
-            }
-
-            // التحقق من تطابق الكود
-            if (inputCode === generatedCode) {
+            if (user === VALID_USER && pass === VALID_PASS) {
                 error.classList.remove('show');
-                success.textContent = '✅ تم التحقق بنجاح! جاري الدخول...';
-                success.classList.add('show');
-                verifyBtn.disabled = true;
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('active');
 
-                // إخفاء شاشة الدخول وإظهار المحتوى
-                setTimeout(() => {
-                    document.getElementById('loginScreen').classList.add('hidden');
-                    document.getElementById('mainContent').classList.add('active');
-
-                    // تحميل الخدمات والسجل
-                    loadServices();
-                    loadLogs();
-
-                    // إيقاف المؤقت
-                    if (countdownInterval) {
-                        clearInterval(countdownInterval);
-                    }
-                }, 800);
-
-                console.log('✅ تم التحقق بنجاح باستخدام الكود:', inputCode);
+                // تحميل الخدمات والسجل فوراً
+                loadServices();
+                loadLogs();
+                loadPricingList();
             } else {
-                error.textContent = '⚠️ الكود غير صحيح، يرجى المحاولة مرة أخرى';
                 error.classList.add('show');
-                success.classList.remove('show');
-                document.getElementById('codeInput').value = '';
-                document.getElementById('codeInput').focus();
-
-                // هز الحقل (تأثير بصري)
-                const input = document.getElementById('codeInput');
-                input.style.borderColor = '#dc2626';
-                setTimeout(() => { input.style.borderColor = '#e2e8f0'; }, 500);
+                document.getElementById('loginPass').value = '';
+                document.getElementById('loginPass').focus();
             }
         }
 
@@ -1637,315 +1198,339 @@
             if (e.key === 'Enter') {
                 const loginScreen = document.getElementById('loginScreen');
                 if (!loginScreen.classList.contains('hidden')) {
-                    // إذا كانت مرحلة الكود ظاهرة
-                    if (document.getElementById('stepCode').style.display !== 'none') {
-                        const codeInput = document.getElementById('codeInput');
-                        if (!codeInput.disabled && codeInput.value.length === 6) {
-                            verifyCode();
-                        }
-                    }
+                    handleLogin();
                 }
             }
         });
 
-        // ============================================================
-        // 2️⃣ تحميل الخدمات من Firebase
-        // ============================================================
-
-        async function loadServices() {
-            const container = document.getElementById('servicesContainer');
-
-            try {
-                const snapshot = await db.collection('services').orderBy('category').get();
-
-                if (snapshot.empty) {
-                    await seedDefaultServices();
-                    return loadServices();
-                }
-
-                let html = '';
-                let currentCategory = '';
-
-                snapshot.forEach(doc => {
-                    const service = doc.data();
-                    const id = doc.id;
-
-                    if (service.category !== currentCategory) {
-                        currentCategory = service.category;
-                        const categoryName = getCategoryName(currentCategory);
-                        html += `
-                                <h2 class="section-title">
-                                    <i class="fas ${getCategoryIcon(currentCategory)}"></i> 
-                                    ${categoryName}
-                                </h2>
-                                <div class="services-grid">
-                            `;
-                    }
-
-                    const priceDisplay = service.price ? `${service.price} ج.م` : 'مجاني';
-                    const btnClass = service.type === 'whatsapp' ? 'btn-whatsapp' : '';
-                    const linkTarget = service.type === 'whatsapp' ?
-                        `https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20${encodeURIComponent(service.name)}` :
-                        service.link || '#';
-
-                    html += `
-                            <div class="service-card" data-service="${service.name}" data-price="${service.price || 0}">
-                                <div class="card-image ${service.color || 'img-blue'}">
-                                    <i class="fas ${service.icon || 'fa-cube'}"></i>
-                                    <span class="overlay-text">${service.type === 'whatsapp' ? 'واتساب' : 'رسمي'}</span>
-                                </div>
-                                <h3>${service.name}</h3>
-                                <div class="price-tag">💰 ${priceDisplay}</div>
-                                <p>${service.description || ''}</p>
-                                <a href="${linkTarget}" target="_blank" class="btn-service ${btnClass}" onclick="logServiceFromCard(this, '${service.name}', ${service.price || 0})">
-                                    ${service.type === 'whatsapp' ? '<i class="fab fa-whatsapp"></i> تواصل عبر واتساب' : 'انتقل للخدمة <i class="fas fa-arrow-left"></i>'}
-                                </a>
-                            </div>
-                        `;
-
-                    if (snapshot.docs.indexOf(doc) === snapshot.docs.length - 1 ||
-                        snapshot.docs[snapshot.docs.indexOf(doc) + 1]?.data().category !== currentCategory) {
-                        html += `</div>`;
-                    }
-                });
-
-                container.innerHTML = html;
-
-            } catch (error) {
-                console.error('خطأ في تحميل الخدمات:', error);
-                container.innerHTML = `
-                        <div class="text-center" style="padding:40px;color:#dc2626;">
-                            <i class="fas fa-exclamation-circle fa-2x"></i>
-                            <p style="margin-top:10px;">حدث خطأ في تحميل الخدمات</p>
-                            <button onclick="loadServices()" style="margin-top:10px;padding:8px 20px;background:#2563eb;color:#fff;border:none;border-radius:10px;cursor:pointer;">إعادة المحاولة</button>
-                        </div>
-                    `;
+        function handleLogout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                document.getElementById('mainContent').classList.remove('active');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('loginPass').value = '';
+                document.getElementById('loginError').classList.remove('show');
             }
         }
 
         // ============================================================
-        // 3️⃣ دوال تسجيل الخدمات والسجل
+        // 2️⃣ قائمة الخدمات (ثابتة - تظهر فوراً)
         // ============================================================
 
-        async function logServiceFromCard(element, serviceName, price) {
+        // قاعدة البيانات المحلية
+        let servicesData = [];
+        let logsData = [];
+
+        // تحميل الخدمات من localStorage أو استخدام الافتراضية
+        function loadServices() {
+            const container = document.getElementById('servicesContainer');
+
+            // محاولة تحميل الخدمات من localStorage
+            const savedServices = localStorage.getItem('servicesData');
+            if (savedServices) {
+                servicesData = JSON.parse(savedServices);
+            } else {
+                // الخدمات الافتراضية
+                servicesData = [
+                    { id: 1, name: 'منصة الكهرباء', price: 50, category: 'electricity', type: 'official',
+                        icon: 'fa-bolt', color: 'img-blue', description: 'خدمات فواتير الكهرباء والاستعلامات' },
+                    { id: 2, name: 'تصريح سفر - الحربية', price: 100, category: 'travel', type: 'official',
+                        icon: 'fa-shield-alt', color: 'img-green', description: 'موقع التجنيد والخدمة العسكرية' },
+                    { id: 3, name: 'وزارة الداخلية', price: 80, category: 'travel', type: 'official', icon: 'fa-id-card',
+                        color: 'img-purple', description: 'تصاريح السفر والجوازات' },
+                    { id: 4, name: 'الوظائف الحكومية', price: 60, category: 'jobs', type: 'official', icon: 'fa-building',
+                        color: 'img-teal', description: 'بوابة التوظيف الحكومي' },
+                    { id: 5, name: 'منصة POD', price: 40, category: 'official', type: 'official', icon: 'fa-network-wired',
+                        color: 'img-cyan', description: 'الخدمات المتكاملة للمواطنين' },
+                    { id: 6, name: 'عيادات التأمين الصحي', price: 30, category: 'health', type: 'official',
+                        icon: 'fa-user-md', color: 'img-red', description: 'حجز مواعيد العيادات' },
+                    { id: 7, name: 'الحساب الموحد للطالب', price: 20, category: 'students', type: 'official',
+                        icon: 'fa-envelope', color: 'img-lime', description: 'خدمات Office 365 للطلاب' },
+                    { id: 8, name: 'خدمة وورد', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-word',
+                        color: 'img-blue', description: 'كتابة وتنسيق مستندات Word' },
+                    { id: 9, name: 'خدمة إكسيل', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-excel',
+                        color: 'img-green', description: 'جداول بيانات وتحليلات' },
+                    { id: 10, name: 'خدمة باوربوينت', price: 200, category: 'design', type: 'whatsapp',
+                        icon: 'fa-file-powerpoint', color: 'img-red', description: 'عروض تقديمية احترافية' },
+                    { id: 11, name: 'تساهيل للسفر', price: 250, category: 'travel', type: 'whatsapp',
+                        icon: 'fa-umbrella-beach', color: 'img-teal', description: 'حجز فنادق وبرامج سياحية' },
+                    { id: 12, name: 'إنجاز للسفر', price: 300, category: 'travel', type: 'whatsapp', icon: 'fa-rocket',
+                        color: 'img-orange', description: 'إنهاء إجراءات السفر' },
+                    { id: 13, name: 'حجز الطيران', price: 200, category: 'travel', type: 'whatsapp',
+                        icon: 'fa-fighter-jet', color: 'img-cyan', description: 'حجز تذاكر طيران' },
+                ];
+                localStorage.setItem('servicesData', JSON.stringify(servicesData));
+            }
+
+            displayServices();
+        }
+
+        function displayServices() {
+            const container = document.getElementById('servicesContainer');
+            let html = '';
+            let currentCategory = '';
+
+            servicesData.forEach(service => {
+                if (service.category !== currentCategory) {
+                    currentCategory = service.category;
+                    const categoryName = getCategoryName(currentCategory);
+                    html += `
+                        <h2 class="section-title">
+                            <i class="fas ${getCategoryIcon(currentCategory)}"></i> 
+                            ${categoryName}
+                        </h2>
+                        <div class="services-grid">
+                    `;
+                }
+
+                const priceDisplay = service.price ? `${service.price} ج.م` : 'مجاني';
+                const btnClass = service.type === 'whatsapp' ? 'btn-whatsapp' : '';
+                const linkTarget = service.type === 'whatsapp' ?
+                    `https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20${encodeURIComponent(service.name)}` :
+                    '#';
+
+                html += `
+                    <div class="service-card" data-service="${service.name}" data-price="${service.price || 0}" data-id="${service.id}">
+                        <div class="card-image ${service.color || 'img-blue'}">
+                            <i class="fas ${service.icon || 'fa-cube'}"></i>
+                            <span class="overlay-text">${service.type === 'whatsapp' ? 'واتساب' : 'رسمي'}</span>
+                        </div>
+                        <h3>${service.name}</h3>
+                        <div class="price-tag">💰 ${priceDisplay}</div>
+                        <p>${service.description || ''}</p>
+                        <a href="${linkTarget}" target="_blank" class="btn-service ${btnClass}" onclick="logService(this, '${service.name}', ${service.price || 0})">
+                            ${service.type === 'whatsapp' ? '<i class="fab fa-whatsapp"></i> تواصل عبر واتساب' : 'انتقل للخدمة <i class="fas fa-arrow-left"></i>'}
+                        </a>
+                    </div>
+                `;
+
+                if (servicesData.indexOf(service) === servicesData.length - 1 ||
+                    servicesData[servicesData.indexOf(service) + 1]?.category !== currentCategory) {
+                    html += `</div>`;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // 3️⃣ تسجيل الخدمات في السجل
+        // ============================================================
+
+        function logService(element, serviceName, price) {
             const clientName = prompt('📝 أدخل اسم العميل:', 'عميل');
             if (clientName === null) return;
 
-            try {
-                await db.collection('dailyLogs').add({
-                    date: new Date().toLocaleDateString('ar-EG'),
-                    time: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    client: clientName || 'عميل',
-                    service: serviceName,
-                    price: price || 0
-                });
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ar-EG');
+            const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-                loadLogs();
-            } catch (error) {
-                console.error('خطأ في تسجيل الخدمة:', error);
-            }
+            const logEntry = {
+                date: dateStr,
+                time: timeStr,
+                timestamp: now.getTime(),
+                client: clientName || 'عميل',
+                service: serviceName,
+                price: price || 0
+            };
+
+            logsData.push(logEntry);
+            localStorage.setItem('logsData', JSON.stringify(logsData));
+            loadLogs();
         }
 
-        async function loadLogs() {
+        // تحميل السجل من localStorage
+        function loadLogs() {
             const tbody = document.getElementById('logBody');
             const count = document.getElementById('logCount');
 
-            try {
-                const snapshot = await db.collection('dailyLogs')
-                    .orderBy('timestamp', 'desc')
-                    .limit(500)
-                    .get();
-
-                if (snapshot.empty) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">📭 لا توجد خدمات مسجلة</td></tr>`;
-                    count.textContent = '0';
-                    return;
-                }
-
-                let html = '';
-                let index = 1;
-                let totalPrice = 0;
-
-                snapshot.forEach(doc => {
-                    const log = doc.data();
-                    const price = log.price || 0;
-                    totalPrice += price;
-
-                    html += `
-                            <tr>
-                                <td>${index}</td>
-                                <td>${log.date || '-'}</td>
-                                <td>${log.time || '-'}</td>
-                                <td>${log.client || 'عميل'}</td>
-                                <td>${log.service || '-'}</td>
-                                <td>${price} ج.م</td>
-                            </tr>
-                        `;
-                    index++;
-                });
-
-                html += `
-                        <tr style="font-weight:700;background:#f1f5f9;">
-                            <td colspan="5" style="text-align:left;">إجمالي اليوم</td>
-                            <td>${totalPrice} ج.م</td>
-                        </tr>
-                    `;
-
-                tbody.innerHTML = html;
-                count.textContent = snapshot.size;
-
-            } catch (error) {
-                console.error('خطأ في تحميل السجل:', error);
-                tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">❌ خطأ في تحميل السجل</td></tr>`;
+            const savedLogs = localStorage.getItem('logsData');
+            if (savedLogs) {
+                logsData = JSON.parse(savedLogs);
+            } else {
+                logsData = [];
             }
+
+            if (logsData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">📭 لا توجد خدمات مسجلة</td></tr>`;
+                count.textContent = '0';
+                return;
+            }
+
+            // ترتيب من الأحدث للأقدم
+            const sorted = [...logsData].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+            let html = '';
+            let totalPrice = 0;
+
+            sorted.forEach((log, index) => {
+                const price = log.price || 0;
+                totalPrice += price;
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${log.date || '-'}</td>
+                        <td>${log.time || '-'}</td>
+                        <td>${log.client || 'عميل'}</td>
+                        <td>${log.service || '-'}</td>
+                        <td>${price} ج.م</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                <tr style="font-weight:700;background:#f1f5f9;">
+                    <td colspan="5" style="text-align:left;">إجمالي اليوم</td>
+                    <td>${totalPrice} ج.م</td>
+                </tr>
+            `;
+
+            tbody.innerHTML = html;
+            count.textContent = sorted.length;
         }
 
         // ============================================================
-        // 4️⃣ دوال التسعير
+        // 4️⃣ التسعير (تعديل الأسعار)
         // ============================================================
 
-        async function openPricing() {
+        function openPricing() {
             document.getElementById('pricingModal').classList.add('active');
-            await loadPricingList();
+            loadPricingList();
         }
 
         function closePricing() {
             document.getElementById('pricingModal').classList.remove('active');
         }
 
-        async function loadPricingList() {
+        function loadPricingList() {
             const container = document.getElementById('pricingList');
-            try {
-                const snapshot = await db.collection('services').orderBy('name').get();
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا توجد خدمات مسجلة</p>';
-                    return;
-                }
-                let html = '';
-                snapshot.forEach(doc => {
-                    const service = doc.data();
-                    const id = doc.id;
-                    html += `
-                            <div class="pricing-item">
-                                <span class="service-name">${service.name}</span>
-                                <input type="number" class="service-price-input" id="price_${id}" value="${service.price || 0}" step="0.01" />
-                                <div class="price-actions">
-                                    <button class="save-price" onclick="updateServicePrice('${id}')"><i class="fas fa-save"></i> حفظ</button>
-                                    <button class="reset-price" onclick="deleteService('${id}')"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                        `;
-                });
-                container.innerHTML = html;
-            } catch (error) {
-                container.innerHTML = `<p style="color:#dc2626;">خطأ: ${error.message}</p>`;
+
+            if (servicesData.length === 0) {
+                container.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;">لا توجد خدمات مسجلة</p>';
+                return;
             }
+
+            let html = '';
+            servicesData.forEach(service => {
+                html += `
+                    <div class="pricing-item">
+                        <span class="service-name">${service.name}</span>
+                        <input type="number" class="service-price-input" id="price_${service.id}" value="${service.price || 0}" step="0.01" />
+                        <div class="price-actions">
+                            <button class="save-price" onclick="updateServicePrice(${service.id})"><i class="fas fa-save"></i> حفظ</button>
+                            <button class="reset-price" onclick="deleteService(${service.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
         }
 
-        async function updateServicePrice(serviceId) {
+        function updateServicePrice(serviceId) {
             const input = document.getElementById(`price_${serviceId}`);
             if (!input) return;
+
             const price = parseFloat(input.value);
             if (isNaN(price) || price < 0) {
                 alert('⚠️ من فضلك أدخل سعر صحيح');
                 return;
             }
-            try {
-                await db.collection('services').doc(serviceId).update({ price: price });
+
+            const service = servicesData.find(s => s.id === serviceId);
+            if (service) {
+                service.price = price;
+                localStorage.setItem('servicesData', JSON.stringify(servicesData));
                 alert('✅ تم تحديث السعر بنجاح');
-                loadPricingList();
-            } catch (error) {
-                alert('❌ حدث خطأ: ' + error.message);
-            }
-        }
-
-        async function deleteService(serviceId) {
-            if (!confirm('⚠️ هل أنت متأكد من حذف هذه الخدمة؟')) return;
-            try {
-                await db.collection('services').doc(serviceId).delete();
-                alert('✅ تم حذف الخدمة بنجاح');
-                loadPricingList();
                 loadServices();
-            } catch (error) {
-                alert('❌ حدث خطأ: ' + error.message);
+                loadPricingList();
             }
         }
 
-        async function addNewService() {
+        function deleteService(serviceId) {
+            if (!confirm('⚠️ هل أنت متأكد من حذف هذه الخدمة؟')) return;
+
+            // طلب كود التأكيد (مخفي)
+            const code = prompt('🔒 أدخل كود التأكيد:');
+            if (code !== DELETE_CODE) {
+                alert('❌ كود غير صحيح');
+                return;
+            }
+
+            servicesData = servicesData.filter(s => s.id !== serviceId);
+            localStorage.setItem('servicesData', JSON.stringify(servicesData));
+            alert('✅ تم حذف الخدمة بنجاح');
+            loadServices();
+            loadPricingList();
+        }
+
+        function addNewService() {
             const name = document.getElementById('newServiceName').value.trim();
             const price = parseFloat(document.getElementById('newServicePrice').value);
             const category = document.getElementById('newServiceCategory').value;
+
             if (!name) { alert('⚠️ من فضلك أدخل اسم الخدمة'); return; }
             if (isNaN(price) || price < 0) { alert('⚠️ من فضلك أدخل سعر صحيح'); return; }
-            try {
-                await db.collection('services').add({
-                    name,
-                    price,
-                    category,
-                    type: category === 'whatsapp' ? 'whatsapp' : 'official',
-                    link: '#',
-                    icon: 'fa-cube',
-                    color: 'img-blue',
-                    description: 'تمت الإضافة يدوياً',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                document.getElementById('newServiceName').value = '';
-                document.getElementById('newServicePrice').value = '';
-                alert('✅ تمت إضافة الخدمة بنجاح');
-                loadServices();
-                loadPricingList();
-            } catch (error) {
-                alert('❌ حدث خطأ: ' + error.message);
-            }
+
+            const newId = servicesData.length > 0 ? Math.max(...servicesData.map(s => s.id)) + 1 : 1;
+
+            servicesData.push({
+                id: newId,
+                name: name,
+                price: price,
+                category: category,
+                type: category === 'whatsapp' ? 'whatsapp' : 'official',
+                icon: 'fa-cube',
+                color: 'img-blue',
+                description: 'تمت الإضافة يدوياً'
+            });
+
+            localStorage.setItem('servicesData', JSON.stringify(servicesData));
+            document.getElementById('newServiceName').value = '';
+            document.getElementById('newServicePrice').value = '';
+            alert('✅ تمت إضافة الخدمة بنجاح');
+            loadServices();
+            loadPricingList();
         }
 
         // ============================================================
         // 5️⃣ التقرير اليومي
         // ============================================================
 
-        async function openDailyReport() {
+        function openDailyReport() {
             document.getElementById('reportModal').classList.add('active');
             const today = new Date().toLocaleDateString('ar-EG');
             const summary = document.getElementById('reportSummary');
             const details = document.getElementById('reportDetails');
 
-            try {
-                const snapshot = await db.collection('dailyLogs').where('date', '==', today).get();
-                if (snapshot.empty) {
-                    summary.innerHTML = `<div class="summary-item">📭 لا توجد خدمات اليوم</div>`;
-                    details.innerHTML = '';
-                    return;
-                }
-                let total = 0;
-                let serviceCount = {};
-                snapshot.forEach(doc => {
-                    const log = doc.data();
-                    const price = log.price || 0;
-                    total += price;
-                    serviceCount[log.service] = (serviceCount[log.service] || 0) + 1;
-                });
-                summary.innerHTML = `
-                        <div class="summary-item"><span>📅 التاريخ:</span> <span>${today}</span></div>
-                        <div class="summary-item"><span>📊 عدد الخدمات:</span> <span>${snapshot.size}</span></div>
-                        <div class="summary-item total"><span>💰 إجمالي الإيرادات:</span> <span>${total} ج.م</span></div>
-                    `;
-                let detailHtml = `<table><thead><tr><th>الخدمة</th><th>العدد</th><th>الإجمالي</th></tr></thead><tbody>`;
-                const servicesSnapshot = await db.collection('services').get();
-                let servicePrices = {};
-                servicesSnapshot.forEach(doc => {
-                    const s = doc.data();
-                    servicePrices[s.name] = s.price || 0;
-                });
-                for (const [service, count] of Object.entries(serviceCount)) {
-                    const price = servicePrices[service] || 0;
-                    detailHtml += `<tr><td>${service}</td><td>${count}</td><td>${price * count} ج.م</td></tr>`;
-                }
-                detailHtml += `</tbody></table>`;
-                details.innerHTML = detailHtml;
-            } catch (error) {
-                summary.innerHTML = `<div class="summary-item" style="color:#dc2626;">❌ خطأ: ${error.message}</div>`;
+            const todayLogs = logsData.filter(log => log.date === today);
+
+            if (todayLogs.length === 0) {
+                summary.innerHTML = `<div class="summary-item">📭 لا توجد خدمات اليوم</div>`;
+                details.innerHTML = '';
+                return;
             }
+
+            let total = 0;
+            let serviceCount = {};
+
+            todayLogs.forEach(log => {
+                total += log.price || 0;
+                serviceCount[log.service] = (serviceCount[log.service] || 0) + 1;
+            });
+
+            summary.innerHTML = `
+                <div class="summary-item"><span>📅 التاريخ:</span> <span>${today}</span></div>
+                <div class="summary-item"><span>📊 عدد الخدمات:</span> <span>${todayLogs.length}</span></div>
+                <div class="summary-item total"><span>💰 إجمالي الإيرادات:</span> <span>${total} ج.م</span></div>
+            `;
+
+            let detailHtml = `<table><thead><tr><th>الخدمة</th><th>العدد</th><th>الإجمالي</th></tr></thead><tbody>`;
+            for (const [service, count] of Object.entries(serviceCount)) {
+                const price = servicesData.find(s => s.name === service)?.price || 0;
+                detailHtml += `<tr><td>${service}</td><td>${count}</td><td>${price * count} ج.م</td></tr>`;
+            }
+            detailHtml += `</tbody></table>`;
+            details.innerHTML = detailHtml;
         }
 
         function closeReport() {
@@ -1956,35 +1541,32 @@
         // 6️⃣ تصدير السجل
         // ============================================================
 
-        async function exportLogs() {
-            try {
-                const snapshot = await db.collection('dailyLogs').orderBy('timestamp', 'desc').get();
-                if (snapshot.empty) { alert('📭 لا توجد سجلات لتصديرها'); return; }
-                let csv = 'التاريخ,الوقت,اسم العميل,الخدمة,السعر\n';
-                snapshot.forEach(doc => {
-                    const log = doc.data();
-                    csv +=
-                        `"${log.date || '-'}","${log.time || '-'}","${log.client || 'عميل'}","${log.service || '-'}",${log.price || 0}\n`;
-                });
-                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                const url = URL.createObjectURL(blob);
-                link.href = url;
-                link.download = `سجل_الخدمات_${new Date().toLocaleDateString('ar-EG')}.csv`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            } catch (error) {
-                alert('❌ حدث خطأ: ' + error.message);
+        function exportLogs() {
+            if (logsData.length === 0) {
+                alert('📭 لا توجد سجلات لتصديرها');
+                return;
             }
+
+            let csv = 'التاريخ,الوقت,اسم العميل,الخدمة,السعر\n';
+            logsData.forEach(log => {
+                csv +=
+                    `"${log.date || '-'}","${log.time || '-'}","${log.client || 'عميل'}","${log.service || '-'}",${log.price || 0}\n`;
+            });
+
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = `سجل_الخدمات_${new Date().toLocaleDateString('ar-EG')}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
 
         // ============================================================
-        // 7️⃣ حذف السجل
+        // 7️⃣ حذف السجل (كود مخفي)
         // ============================================================
-
-        const DELETE_CODE = '015593';
 
         function openDeleteModal() {
             document.getElementById('deleteModal').classList.add('active');
@@ -1996,119 +1578,33 @@
             document.getElementById('deleteModal').classList.remove('active');
         }
 
-        async function confirmDeleteLogs() {
+        function confirmDeleteLogs() {
             const code = document.getElementById('deleteCodeInput').value.trim();
+
             if (code !== DELETE_CODE) {
                 document.getElementById('deleteError').classList.add('show');
                 document.getElementById('deleteCodeInput').value = '';
                 setTimeout(() => document.getElementById('deleteError').classList.remove('show'), 3000);
                 return;
             }
-            try {
-                const snapshot = await db.collection('dailyLogs').get();
-                const batch = db.batch();
-                snapshot.forEach(doc => batch.delete(doc.ref));
-                await batch.commit();
-                alert('✅ تم حذف جميع السجلات بنجاح');
-                closeDeleteModal();
-                loadLogs();
-            } catch (error) {
-                alert('❌ حدث خطأ: ' + error.message);
-            }
+
+            logsData = [];
+            localStorage.setItem('logsData', JSON.stringify(logsData));
+            alert('✅ تم حذف جميع السجلات بنجاح');
+            closeDeleteModal();
+            loadLogs();
         }
 
         // ============================================================
-        // 8️⃣ تغيير كلمة المرور
-        // ============================================================
-
-        function openChangePassword() {
-            document.getElementById('changePasswordModal').classList.add('active');
-            document.getElementById('newPasswordInput').value = '';
-            document.getElementById('confirmPasswordInput').value = '';
-            document.getElementById('cpError').classList.remove('show');
-            document.getElementById('cpSuccess').classList.remove('show');
-        }
-
-        function closeChangePassword() {
-            document.getElementById('changePasswordModal').classList.remove('active');
-        }
-
-        async function changePassword() {
-            const newPass = document.getElementById('newPasswordInput').value.trim();
-            const confirmPass = document.getElementById('confirmPasswordInput').value.trim();
-            const error = document.getElementById('cpError');
-            const success = document.getElementById('cpSuccess');
-            error.classList.remove('show');
-            success.classList.remove('show');
-            if (newPass.length < 8) {
-                error.textContent = '⚠️ كلمة المرور يجب أن تكون 8 أحرف على الأقل';
-                error.classList.add('show');
-                return;
-            }
-            if (newPass !== confirmPass) {
-                error.textContent = '⚠️ كلمة المرور غير متطابقة';
-                error.classList.add('show');
-                return;
-            }
-            try {
-                const user = firebase.auth().currentUser;
-                if (user) {
-                    await user.updatePassword(newPass);
-                    success.textContent = '✅ تم تغيير كلمة المرور بنجاح';
-                    success.classList.add('show');
-                    setTimeout(closeChangePassword, 2000);
-                } else {
-                    error.textContent = '⚠️ الرجاء تسجيل الدخول أولاً';
-                    error.classList.add('show');
-                }
-            } catch (err) {
-                error.textContent = '⚠️ ' + err.message;
-                error.classList.add('show');
-            }
-        }
-
-        // ============================================================
-        // 9️⃣ تسجيل الخروج
-        // ============================================================
-
-        function handleLogout() {
-            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                // إعادة تعيين كل شيء
-                document.getElementById('mainContent').classList.remove('active');
-                document.getElementById('loginScreen').classList.remove('hidden');
-
-                // إعادة تعيين مراحل تسجيل الدخول
-                document.getElementById('stepPhone').style.display = 'block';
-                document.getElementById('stepCode').style.display = 'none';
-                document.getElementById('codeDisplay').classList.remove('show');
-                document.getElementById('codeInput').value = '';
-                document.getElementById('codeInput').disabled = false;
-                document.getElementById('verifyBtn').disabled = false;
-                document.getElementById('loginError').classList.remove('show');
-                document.getElementById('loginSuccess').classList.remove('show');
-
-                // إيقاف المؤقت
-                if (countdownInterval) {
-                    clearInterval(countdownInterval);
-                }
-
-                // إعادة تعيين الكود
-                generatedCode = '';
-                codeExpiry = null;
-
-                // تسجيل الخروج من Firebase
-                firebase.auth().signOut();
-            }
-        }
-
-        // ============================================================
-        // 🔟 الآلة الحاسبة
+        // 8️⃣ الآلة الحاسبة
         // ============================================================
 
         let calcValue = '0';
 
         function openCalculator() {
             document.getElementById('calcModal').classList.add('active');
+            document.getElementById('calcDisplay').value = '0';
+            calcValue = '0';
         }
 
         function closeCalculator() {
@@ -2143,7 +1639,7 @@
         }
 
         // ============================================================
-        // 1️⃣1️⃣ دوال مساعدة
+        // 9️⃣ دوال مساعدة
         // ============================================================
 
         function getCategoryName(category) {
@@ -2179,53 +1675,10 @@
         }
 
         // ============================================================
-        // 1️⃣2️⃣ إضافة خدمات افتراضية
+        // 🔟 إغلاق النوافذ المنبثقة بالضغط خارجها
         // ============================================================
 
-        async function seedDefaultServices() {
-            const services = [
-                { name: 'منصة الكهرباء', price: 50, category: 'electricity', type: 'official', icon: 'fa-bolt',
-                    color: 'img-blue', description: 'خدمات فواتير الكهرباء والاستعلامات' },
-                { name: 'تصريح سفر - الحربية', price: 100, category: 'travel', type: 'official', icon: 'fa-shield-alt',
-                    color: 'img-green', description: 'موقع التجنيد والخدمة العسكرية' },
-                { name: 'وزارة الداخلية', price: 80, category: 'travel', type: 'official', icon: 'fa-id-card',
-                    color: 'img-purple', description: 'تصاريح السفر والجوازات' },
-                { name: 'الوظائف الحكومية', price: 60, category: 'jobs', type: 'official', icon: 'fa-building',
-                    color: 'img-teal', description: 'بوابة التوظيف الحكومي' },
-                { name: 'منصة POD', price: 40, category: 'official', type: 'official', icon: 'fa-network-wired',
-                    color: 'img-cyan', description: 'الخدمات المتكاملة للمواطنين' },
-                { name: 'عيادات التأمين الصحي', price: 30, category: 'health', type: 'official', icon: 'fa-user-md',
-                    color: 'img-red', description: 'حجز مواعيد العيادات' },
-                { name: 'الحساب الموحد للطالب', price: 20, category: 'students', type: 'official', icon: 'fa-envelope',
-                    color: 'img-lime', description: 'خدمات Office 365 للطلاب' },
-                { name: 'خدمة وورد', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-word',
-                    color: 'img-blue', description: 'كتابة وتنسيق مستندات Word' },
-                { name: 'خدمة إكسيل', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-excel',
-                    color: 'img-green', description: 'جداول بيانات وتحليلات' },
-                { name: 'خدمة باوربوينت', price: 200, category: 'design', type: 'whatsapp', icon: 'fa-file-powerpoint',
-                    color: 'img-red', description: 'عروض تقديمية احترافية' },
-                { name: 'تساهيل للسفر', price: 250, category: 'travel', type: 'whatsapp', icon: 'fa-umbrella-beach',
-                    color: 'img-teal', description: 'حجز فنادق وبرامج سياحية' },
-                { name: 'إنجاز للسفر', price: 300, category: 'travel', type: 'whatsapp', icon: 'fa-rocket',
-                    color: 'img-orange', description: 'إنهاء إجراءات السفر' },
-                { name: 'حجز الطيران', price: 200, category: 'travel', type: 'whatsapp', icon: 'fa-fighter-jet',
-                    color: 'img-cyan', description: 'حجز تذاكر طيران' },
-            ];
-            try {
-                for (const service of services) {
-                    await db.collection('services').add(service);
-                }
-                console.log('✅ تمت إضافة الخدمات الافتراضية');
-            } catch (error) {
-                console.error('❌ خطأ في إضافة الخدمات الافتراضية:', error);
-            }
-        }
-
-        // ============================================================
-        // 1️⃣3️⃣ إغلاق النوافذ المنبثقة بالضغط خارجها
-        // ============================================================
-
-        document.querySelectorAll('.pricing-modal, .report-modal, .change-password-modal, .delete-modal').forEach(modal => {
+        document.querySelectorAll('.pricing-modal, .report-modal, .delete-modal').forEach(modal => {
             modal.addEventListener('click', function(e) {
                 if (e.target === this) {
                     this.classList.remove('active');
@@ -2234,23 +1687,19 @@
         });
 
         // ============================================================
-        // 1️⃣4️⃣ مراقبة حالة تسجيل الدخول
+        // 1️⃣1️⃣ تحميل البيانات تلقائياً عند فتح الصفحة
         // ============================================================
 
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                // المستخدم مسجل الدخول بالفعل
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('mainContent').classList.add('active');
-                loadServices();
-                loadLogs();
-            }
-        });
+        // تحميل السجل من localStorage
+        const savedLogs = localStorage.getItem('logsData');
+        if (savedLogs) {
+            logsData = JSON.parse(savedLogs);
+        }
 
-        console.log('🚀 نظام إدارة الخدمات المتكاملة جاهز!');
-        console.log('📱 كود الحذف: 015593');
-        console.log('📞 الأرقام المسموح بها:', ALLOWED_PHONES);
-        console.log('🔑 يتم إرسال الكود عبر واتساب');
+        console.log('🚀 نظام إدارة الخدمات جاهز!');
+        console.log('📱 كود الحذف مخفي (015593)');
+        console.log('📞 المستخدم: 01032720236');
+        console.log('🔑 الباسورد: Mm01032720236@@');
     </script>
 
 </body>
