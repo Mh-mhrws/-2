@@ -431,6 +431,10 @@
             background: #1da851;
         }
 
+        .service-card .btn-service .fa-arrow-left {
+            margin-right: 4px;
+        }
+
         /* سجل الخدمات */
         .log-section {
             background: rgba(255, 255, 255, 0.9);
@@ -676,11 +680,11 @@
             background: #15803d;
         }
         .pricing-item .price-actions .reset-price {
-            background: #f59e0b;
+            background: #dc2626;
             color: #fff;
         }
         .pricing-item .price-actions .reset-price:hover {
-            background: #d97706;
+            background: #b91c1c;
         }
 
         .pricing-box .add-service-area {
@@ -914,6 +918,40 @@
             display: none !important;
         }
 
+        /* تأثيرات إضافية */
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0f172a;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-message.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-message.success {
+            background: #16a34a;
+        }
+
+        .toast-message.error {
+            background: #dc2626;
+        }
+
         @media (max-width: 700px) {
             .navbar {
                 flex-direction: column;
@@ -958,6 +996,13 @@
             }
             .pricing-item .service-price-input {
                 width: 100%;
+            }
+            .toast-message {
+                bottom: 15px;
+                right: 15px;
+                left: 15px;
+                padding: 12px 18px;
+                font-size: 13px;
             }
         }
     </style>
@@ -1017,11 +1062,9 @@
         </nav>
 
         <!-- ============================================================
-        الخدمات (مباشرة - بدون تحميل)
+        الخدمات
         ============================================================ -->
-        <div id="servicesContainer">
-            <!-- سيتم عرض الخدمات مباشرة من خلال JavaScript -->
-        </div>
+        <div id="servicesContainer"></div>
 
         <!-- ============================================================
         سجل الخدمات
@@ -1055,13 +1098,12 @@
                             <th>#</th>
                             <th>التاريخ</th>
                             <th>الوقت</th>
-                            <th>اسم العميل</th>
                             <th>الخدمة</th>
                             <th>السعر</th>
                         </tr>
                     </thead>
                     <tbody id="logBody">
-                        <tr><td colspan="6" class="empty-msg">لا توجد خدمات مسجلة</td></tr>
+                        <tr><td colspan="5" class="empty-msg">لا توجد خدمات مسجلة</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -1092,7 +1134,6 @@
                 </select>
                 <button onclick="addNewService()"><i class="fas fa-plus"></i> إضافة</button>
             </div>
-            <!-- تم إخفاء كود التسعير -->
         </div>
     </div>
 
@@ -1113,7 +1154,7 @@
     </div>
 
     <!-- ============================================================
-    نافذة حذف السجل (الكود مخفي)
+    نافذة حذف السجل
     ============================================================ -->
     <div class="delete-modal" id="deleteModal">
         <div class="del-box">
@@ -1161,11 +1202,19 @@
     </div>
 
     <!-- ============================================================
+    Toast Notification
+    ============================================================ -->
+    <div class="toast-message" id="toastMessage">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastText">تم الحفظ بنجاح</span>
+    </div>
+
+    <!-- ============================================================
     جافا سكريبت
     ============================================================ -->
     <script>
         // ============================================================
-        // 1️⃣ نظام تسجيل الدخول (ثابت - بدون Firebase)
+        // 1️⃣ نظام تسجيل الدخول
         // ============================================================
 
         const VALID_USER = '01032720236';
@@ -1182,10 +1231,10 @@
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('mainContent').classList.add('active');
 
-                // تحميل الخدمات والسجل فوراً
                 loadServices();
                 loadLogs();
                 loadPricingList();
+                showToast('✅ مرحباً بك في منصة خدماتي', 'success');
             } else {
                 error.classList.add('show');
                 document.getElementById('loginPass').value = '';
@@ -1193,7 +1242,6 @@
             }
         }
 
-        // السماح بالدخول بضغط Enter
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const loginScreen = document.getElementById('loginScreen');
@@ -1209,54 +1257,86 @@
                 document.getElementById('loginScreen').classList.remove('hidden');
                 document.getElementById('loginPass').value = '';
                 document.getElementById('loginError').classList.remove('show');
+                showToast('👋 تم تسجيل الخروج', '');
             }
         }
 
         // ============================================================
-        // 2️⃣ قائمة الخدمات (ثابتة - تظهر فوراً)
+        // 2️⃣ Toast Notification
         // ============================================================
 
-        // قاعدة البيانات المحلية
+        let toastTimeout = null;
+
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toastMessage');
+            const text = document.getElementById('toastText');
+
+            text.textContent = message;
+            toast.className = 'toast-message show ' + type;
+
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ============================================================
+        // 3️⃣ قائمة الخدمات
+        // ============================================================
+
         let servicesData = [];
         let logsData = [];
 
-        // تحميل الخدمات من localStorage أو استخدام الافتراضية
         function loadServices() {
             const container = document.getElementById('servicesContainer');
 
-            // محاولة تحميل الخدمات من localStorage
             const savedServices = localStorage.getItem('servicesData');
             if (savedServices) {
                 servicesData = JSON.parse(savedServices);
             } else {
-                // الخدمات الافتراضية
                 servicesData = [
                     { id: 1, name: 'منصة الكهرباء', price: 50, category: 'electricity', type: 'official',
-                        icon: 'fa-bolt', color: 'img-blue', description: 'خدمات فواتير الكهرباء والاستعلامات' },
+                        icon: 'fa-bolt', color: 'img-blue', description: 'خدمات فواتير الكهرباء والاستعلامات',
+                        link: 'https://eservices.eehc.gov.eg/' },
                     { id: 2, name: 'تصريح سفر - الحربية', price: 100, category: 'travel', type: 'official',
-                        icon: 'fa-shield-alt', color: 'img-green', description: 'موقع التجنيد والخدمة العسكرية' },
+                        icon: 'fa-shield-alt', color: 'img-green', description: 'موقع التجنيد والخدمة العسكرية',
+                        link: 'https://tagcand.mod.gov.eg/' },
                     { id: 3, name: 'وزارة الداخلية', price: 80, category: 'travel', type: 'official', icon: 'fa-id-card',
-                        color: 'img-purple', description: 'تصاريح السفر والجوازات' },
+                        color: 'img-purple', description: 'تصاريح السفر والجوازات',
+                        link: 'https://moi.gov.eg/' },
                     { id: 4, name: 'الوظائف الحكومية', price: 60, category: 'jobs', type: 'official', icon: 'fa-building',
-                        color: 'img-teal', description: 'بوابة التوظيف الحكومي' },
+                        color: 'img-teal', description: 'بوابة التوظيف الحكومي',
+                        link: 'https://jobs.caoa.gov.eg/' },
                     { id: 5, name: 'منصة POD', price: 40, category: 'official', type: 'official', icon: 'fa-network-wired',
-                        color: 'img-cyan', description: 'الخدمات المتكاملة للمواطنين' },
+                        color: 'img-cyan', description: 'الخدمات المتكاملة للمواطنين',
+                        link: 'https://pod.mohp.gov.eg/Inquery.aspx' },
                     { id: 6, name: 'عيادات التأمين الصحي', price: 30, category: 'health', type: 'official',
-                        icon: 'fa-user-md', color: 'img-red', description: 'حجز مواعيد العيادات' },
+                        icon: 'fa-user-md', color: 'img-red', description: 'حجز مواعيد العيادات',
+                        link: 'https://reserv.hiocdis.org/hioclinicreservation.aspx' },
                     { id: 7, name: 'الحساب الموحد للطالب', price: 20, category: 'students', type: 'official',
-                        icon: 'fa-envelope', color: 'img-lime', description: 'خدمات Office 365 للطلاب' },
+                        icon: 'fa-envelope', color: 'img-lime', description: 'خدمات Office 365 للطلاب',
+                        link: 'https://office365.emis.gov.eg/' },
                     { id: 8, name: 'خدمة وورد', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-word',
-                        color: 'img-blue', description: 'كتابة وتنسيق مستندات Word' },
+                        color: 'img-blue', description: 'كتابة وتنسيق مستندات Word',
+                        link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20ورد' },
                     { id: 9, name: 'خدمة إكسيل', price: 150, category: 'design', type: 'whatsapp', icon: 'fa-file-excel',
-                        color: 'img-green', description: 'جداول بيانات وتحليلات' },
+                        color: 'img-green', description: 'جداول بيانات وتحليلات',
+                        link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20إكسيل' },
                     { id: 10, name: 'خدمة باوربوينت', price: 200, category: 'design', type: 'whatsapp',
-                        icon: 'fa-file-powerpoint', color: 'img-red', description: 'عروض تقديمية احترافية' },
+                        icon: 'fa-file-powerpoint', color: 'img-red', description: 'عروض تقديمية احترافية',
+                        link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20باوربوينت' },
                     { id: 11, name: 'تساهيل للسفر', price: 250, category: 'travel', type: 'whatsapp',
-                        icon: 'fa-umbrella-beach', color: 'img-teal', description: 'حجز فنادق وبرامج سياحية' },
+                        icon: 'fa-umbrella-beach', color: 'img-teal', description: 'حجز فنادق وبرامج سياحية',
+                        link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20تساهيل' },
                     { id: 12, name: 'إنجاز للسفر', price: 300, category: 'travel', type: 'whatsapp', icon: 'fa-rocket',
-                        color: 'img-orange', description: 'إنهاء إجراءات السفر' },
+                        color: 'img-orange', description: 'إنهاء إجراءات السفر',
+                        link: 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20إنجاز' },
                     { id: 13, name: 'حجز الطيران', price: 200, category: 'travel', type: 'whatsapp',
-                        icon: 'fa-fighter-jet', color: 'img-cyan', description: 'حجز تذاكر طيران' },
+                        icon: 'fa-fighter-jet', color: 'img-cyan', description: 'حجز تذاكر طيران',
+                        link: 'https://wa.me/2010xxxxxxxx?text=أريد%20حجز%20طيران' },
                 ];
                 localStorage.setItem('servicesData', JSON.stringify(servicesData));
             }
@@ -1284,9 +1364,10 @@
 
                 const priceDisplay = service.price ? `${service.price} ج.م` : 'مجاني';
                 const btnClass = service.type === 'whatsapp' ? 'btn-whatsapp' : '';
-                const linkTarget = service.type === 'whatsapp' ?
-                    `https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20${encodeURIComponent(service.name)}` :
-                    '#';
+                const linkTarget = service.link || '#';
+                const btnText = service.type === 'whatsapp' ?
+                    '<i class="fab fa-whatsapp"></i> بدء الخدمة' :
+                    'بدء الخدمة <i class="fas fa-arrow-left"></i>';
 
                 html += `
                     <div class="service-card" data-service="${service.name}" data-price="${service.price || 0}" data-id="${service.id}">
@@ -1295,10 +1376,10 @@
                             <span class="overlay-text">${service.type === 'whatsapp' ? 'واتساب' : 'رسمي'}</span>
                         </div>
                         <h3>${service.name}</h3>
-                        <div class="price-tag">💰 ${priceDisplay}</div>
+                        <div class="price-tag" id="priceTag_${service.id}">💰 ${priceDisplay}</div>
                         <p>${service.description || ''}</p>
-                        <a href="${linkTarget}" target="_blank" class="btn-service ${btnClass}" onclick="logService(this, '${service.name}', ${service.price || 0})">
-                            ${service.type === 'whatsapp' ? '<i class="fab fa-whatsapp"></i> تواصل عبر واتساب' : 'انتقل للخدمة <i class="fas fa-arrow-left"></i>'}
+                        <a href="${linkTarget}" target="_blank" class="btn-service ${btnClass}" onclick="startService(${service.id}, '${service.name}', ${service.price || 0})">
+                            ${btnText}
                         </a>
                     </div>
                 `;
@@ -1313,13 +1394,11 @@
         }
 
         // ============================================================
-        // 3️⃣ تسجيل الخدمات في السجل
+        // 4️⃣ بدء الخدمة (حفظ تلقائي + انتقال للموقع)
         // ============================================================
 
-        function logService(element, serviceName, price) {
-            const clientName = prompt('📝 أدخل اسم العميل:', 'عميل');
-            if (clientName === null) return;
-
+        function startService(serviceId, serviceName, price) {
+            // حفظ الخدمة في السجل تلقائياً
             const now = new Date();
             const dateStr = now.toLocaleDateString('ar-EG');
             const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -1328,7 +1407,6 @@
                 date: dateStr,
                 time: timeStr,
                 timestamp: now.getTime(),
-                client: clientName || 'عميل',
                 service: serviceName,
                 price: price || 0
             };
@@ -1336,9 +1414,17 @@
             logsData.push(logEntry);
             localStorage.setItem('logsData', JSON.stringify(logsData));
             loadLogs();
+
+            showToast(`✅ تم بدء خدمة "${serviceName}"`, 'success');
+
+            // الرابط هيفتح تلقائياً لأن العنصر <a> عنده target="_blank"
+            return true;
         }
 
-        // تحميل السجل من localStorage
+        // ============================================================
+        // 5️⃣ تحميل السجل
+        // ============================================================
+
         function loadLogs() {
             const tbody = document.getElementById('logBody');
             const count = document.getElementById('logCount');
@@ -1351,12 +1437,11 @@
             }
 
             if (logsData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="empty-msg">📭 لا توجد خدمات مسجلة</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="empty-msg">📭 لا توجد خدمات مسجلة</td></tr>`;
                 count.textContent = '0';
                 return;
             }
 
-            // ترتيب من الأحدث للأقدم
             const sorted = [...logsData].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
             let html = '';
@@ -1370,7 +1455,6 @@
                         <td>${index + 1}</td>
                         <td>${log.date || '-'}</td>
                         <td>${log.time || '-'}</td>
-                        <td>${log.client || 'عميل'}</td>
                         <td>${log.service || '-'}</td>
                         <td>${price} ج.م</td>
                     </tr>
@@ -1379,7 +1463,7 @@
 
             html += `
                 <tr style="font-weight:700;background:#f1f5f9;">
-                    <td colspan="5" style="text-align:left;">إجمالي اليوم</td>
+                    <td colspan="4" style="text-align:left;">إجمالي اليوم</td>
                     <td>${totalPrice} ج.م</td>
                 </tr>
             `;
@@ -1389,7 +1473,7 @@
         }
 
         // ============================================================
-        // 4️⃣ التسعير (تعديل الأسعار)
+        // 6️⃣ التسعير (تحديث الأسعار)
         // ============================================================
 
         function openPricing() {
@@ -1414,7 +1498,7 @@
                 html += `
                     <div class="pricing-item">
                         <span class="service-name">${service.name}</span>
-                        <input type="number" class="service-price-input" id="price_${service.id}" value="${service.price || 0}" step="0.01" />
+                        <input type="number" class="service-price-input" id="priceInput_${service.id}" value="${service.price || 0}" step="0.01" />
                         <div class="price-actions">
                             <button class="save-price" onclick="updateServicePrice(${service.id})"><i class="fas fa-save"></i> حفظ</button>
                             <button class="reset-price" onclick="deleteService(${service.id})"><i class="fas fa-trash"></i></button>
@@ -1427,12 +1511,12 @@
         }
 
         function updateServicePrice(serviceId) {
-            const input = document.getElementById(`price_${serviceId}`);
+            const input = document.getElementById(`priceInput_${serviceId}`);
             if (!input) return;
 
             const price = parseFloat(input.value);
             if (isNaN(price) || price < 0) {
-                alert('⚠️ من فضلك أدخل سعر صحيح');
+                showToast('⚠️ من فضلك أدخل سعر صحيح', 'error');
                 return;
             }
 
@@ -1440,25 +1524,33 @@
             if (service) {
                 service.price = price;
                 localStorage.setItem('servicesData', JSON.stringify(servicesData));
-                alert('✅ تم تحديث السعر بنجاح');
-                loadServices();
+
+                // تحديث السعر في البطاقة مباشرة
+                const priceTag = document.getElementById(`priceTag_${serviceId}`);
+                if (priceTag) {
+                    priceTag.textContent = `💰 ${price} ج.م`;
+                }
+
+                showToast(`✅ تم تحديث سعر "${service.name}" إلى ${price} ج.م`, 'success');
                 loadPricingList();
             }
         }
 
         function deleteService(serviceId) {
-            if (!confirm('⚠️ هل أنت متأكد من حذف هذه الخدمة؟')) return;
+            const service = servicesData.find(s => s.id === serviceId);
+            if (!service) return;
 
-            // طلب كود التأكيد (مخفي)
-            const code = prompt('🔒 أدخل كود التأكيد:');
+            const code = prompt('🔒 أدخل كود التأكيد لحذف الخدمة:');
             if (code !== DELETE_CODE) {
-                alert('❌ كود غير صحيح');
+                showToast('❌ كود غير صحيح', 'error');
                 return;
             }
 
+            if (!confirm(`⚠️ هل أنت متأكد من حذف "${service.name}"؟`)) return;
+
             servicesData = servicesData.filter(s => s.id !== serviceId);
             localStorage.setItem('servicesData', JSON.stringify(servicesData));
-            alert('✅ تم حذف الخدمة بنجاح');
+            showToast(`✅ تم حذف "${service.name}" بنجاح`, 'success');
             loadServices();
             loadPricingList();
         }
@@ -1468,12 +1560,12 @@
             const price = parseFloat(document.getElementById('newServicePrice').value);
             const category = document.getElementById('newServiceCategory').value;
 
-            if (!name) { alert('⚠️ من فضلك أدخل اسم الخدمة'); return; }
-            if (isNaN(price) || price < 0) { alert('⚠️ من فضلك أدخل سعر صحيح'); return; }
+            if (!name) { showToast('⚠️ من فضلك أدخل اسم الخدمة', 'error'); return; }
+            if (isNaN(price) || price < 0) { showToast('⚠️ من فضلك أدخل سعر صحيح', 'error'); return; }
 
             const newId = servicesData.length > 0 ? Math.max(...servicesData.map(s => s.id)) + 1 : 1;
 
-            servicesData.push({
+            const newService = {
                 id: newId,
                 name: name,
                 price: price,
@@ -1481,19 +1573,24 @@
                 type: category === 'whatsapp' ? 'whatsapp' : 'official',
                 icon: 'fa-cube',
                 color: 'img-blue',
-                description: 'تمت الإضافة يدوياً'
-            });
+                description: 'تمت الإضافة يدوياً',
+                link: category === 'whatsapp' ? 'https://wa.me/2010xxxxxxxx?text=أريد%20خدمة%20' + encodeURIComponent(name) :
+                    '#'
+            };
 
+            servicesData.push(newService);
             localStorage.setItem('servicesData', JSON.stringify(servicesData));
+
             document.getElementById('newServiceName').value = '';
             document.getElementById('newServicePrice').value = '';
-            alert('✅ تمت إضافة الخدمة بنجاح');
+
+            showToast(`✅ تمت إضافة "${name}" بنجاح`, 'success');
             loadServices();
             loadPricingList();
         }
 
         // ============================================================
-        // 5️⃣ التقرير اليومي
+        // 7️⃣ التقرير اليومي
         // ============================================================
 
         function openDailyReport() {
@@ -1538,19 +1635,19 @@
         }
 
         // ============================================================
-        // 6️⃣ تصدير السجل
+        // 8️⃣ تصدير السجل
         // ============================================================
 
         function exportLogs() {
             if (logsData.length === 0) {
-                alert('📭 لا توجد سجلات لتصديرها');
+                showToast('📭 لا توجد سجلات لتصديرها', 'error');
                 return;
             }
 
-            let csv = 'التاريخ,الوقت,اسم العميل,الخدمة,السعر\n';
+            let csv = 'التاريخ,الوقت,الخدمة,السعر\n';
             logsData.forEach(log => {
                 csv +=
-                    `"${log.date || '-'}","${log.time || '-'}","${log.client || 'عميل'}","${log.service || '-'}",${log.price || 0}\n`;
+                    `"${log.date || '-'}","${log.time || '-'}","${log.service || '-'}",${log.price || 0}\n`;
             });
 
             const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -1562,10 +1659,12 @@
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
+
+            showToast('✅ تم تصدير السجل بنجاح', 'success');
         }
 
         // ============================================================
-        // 7️⃣ حذف السجل (كود مخفي)
+        // 9️⃣ حذف السجل
         // ============================================================
 
         function openDeleteModal() {
@@ -1590,13 +1689,13 @@
 
             logsData = [];
             localStorage.setItem('logsData', JSON.stringify(logsData));
-            alert('✅ تم حذف جميع السجلات بنجاح');
+            showToast('✅ تم حذف جميع السجلات بنجاح', 'success');
             closeDeleteModal();
             loadLogs();
         }
 
         // ============================================================
-        // 8️⃣ الآلة الحاسبة
+        // 🔟 الآلة الحاسبة
         // ============================================================
 
         let calcValue = '0';
@@ -1639,7 +1738,7 @@
         }
 
         // ============================================================
-        // 9️⃣ دوال مساعدة
+        // 1️⃣1️⃣ دوال مساعدة
         // ============================================================
 
         function getCategoryName(category) {
@@ -1675,7 +1774,7 @@
         }
 
         // ============================================================
-        // 🔟 إغلاق النوافذ المنبثقة بالضغط خارجها
+        // 1️⃣2️⃣ إغلاق النوافذ المنبثقة بالضغط خارجها
         // ============================================================
 
         document.querySelectorAll('.pricing-modal, .report-modal, .delete-modal').forEach(modal => {
@@ -1687,19 +1786,18 @@
         });
 
         // ============================================================
-        // 1️⃣1️⃣ تحميل البيانات تلقائياً عند فتح الصفحة
+        // 1️⃣3️⃣ تحميل البيانات تلقائياً
         // ============================================================
 
-        // تحميل السجل من localStorage
         const savedLogs = localStorage.getItem('logsData');
         if (savedLogs) {
             logsData = JSON.parse(savedLogs);
         }
 
-        console.log('🚀 نظام إدارة الخدمات جاهز!');
-        console.log('📱 كود الحذف مخفي (015593)');
-        console.log('📞 المستخدم: 01032720236');
+        console.log('🚀 نظام إدارة الخدمات المتكاملة جاهز!');
+        console.log('📱 المستخدم: 01032720236');
         console.log('🔑 الباسورد: Mm01032720236@@');
+        console.log('🔒 كود الحذف: 015593 (مخفي)');
     </script>
 
 </body>
